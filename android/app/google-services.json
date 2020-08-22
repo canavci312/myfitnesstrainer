@@ -1,0 +1,56 @@
+{
+  "project_info": {
+    "project_number": "31480259416",
+    "firebase_url": "https://myfitnesstrainer-234c2.firebaseio.com",
+    "project_id": "myfitnesstrainer-234c2",
+    "storage_bucket": "myfitnesstrainer-234c2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:31480259416:android:c25df6cc4bcf28a3ccfb2d",
+        "android_client_info": {
+          "package_name": "com.example.myfitnesstrainer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "31480259416-i2to1rm67cqkptvcg6sjrtcpcp5tissg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.myfitnesstrainer",
+            "certificate_hash": "cf02ab4188bb9429c1fc55bbae8e736bfcbaa448"
+          }
+        },
+        {
+          "client_id": "31480259416-tscb0j8sqdlr3rkadegfftda6mq6d6p9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.myfitnesstrainer",
+            "certificate_hash": "07af008a8352cf1776334183c93e053a154a996d"
+          }
+        },
+        {
+          "client_id": "31480259416-q5e1v5irbqnuq931bolpae6ffegqo5mg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAxSrlFMRjFupekAeafGAXD9HPu72NZbrg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "31480259416-q5e1v5irbqnuq931bolpae6ffegqo5mg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
