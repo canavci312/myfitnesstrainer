@@ -40,6 +40,8 @@ dependencies:
   path: ^1.7.0
   expandable: ^4.1.4
   intl: ^0.16.1
+  timeago: ^2.0.27
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

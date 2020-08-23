@@ -3,6 +3,7 @@ import 'package:myfitnesstrainer/locator.dart';
 import 'package:myfitnesstrainer/models/measurement.dart';
 import 'package:myfitnesstrainer/models/student_data.dart';
 import 'package:myfitnesstrainer/models/user.dart';
+import 'package:myfitnesstrainer/models/workout_plan.dart';
 import 'package:myfitnesstrainer/services/firestore_services.dart';
 import 'package:myfitnesstrainer/viewmodel/trainer_data_viewmodel.dart';
 

@@ -1,9 +1,7 @@
 import 'package:flutter/widgets.dart';
-import 'package:myfitnesstrainer/locator.dart';
 import 'package:myfitnesstrainer/models/exercise_targets.dart';
 import 'package:myfitnesstrainer/models/workout.dart';
 import 'package:myfitnesstrainer/models/workout_plan.dart';
-import 'package:myfitnesstrainer/services/firestore_services.dart';
 
 import '../models/workout_plan.dart';
 
@@ -13,23 +11,18 @@ enum LoadState { Idle, Loading }
 class CreateWorkoutPlanModel with ChangeNotifier {
   List<Workout> workouts;
   WorkoutPlan workoutPlan;
-  CreateWorkoutPlanModel({this.workoutPlan}){
-    if(workoutPlan==null){
+  CreateWorkoutPlanModel({this.workoutPlan}) {
+    if (workoutPlan == null) {
       workoutPlan = WorkoutPlan(name: "Programı isimlendirin");
-      workouts=[];
+      workouts = [];
+    } else {
+      workouts = workoutPlan.workouts;
+      this.workoutPlan = workoutPlan;
     }
-    else
-    {
-      workouts=workoutPlan.workouts;
-      this.workoutPlan=workoutPlan;
-
-    }
-    
   }
-  
+
   EditState _state = EditState.Idle;
   LoadState _loadState = LoadState.Idle;
-  FirestoreDBService _firestoreDBService = locator<FirestoreDBService>();
 
   EditState get state => _state;
 

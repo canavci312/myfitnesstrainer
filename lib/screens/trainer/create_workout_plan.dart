@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myfitnesstrainer/locator.dart';
+import 'package:myfitnesstrainer/models/student_data.dart';
 import 'package:myfitnesstrainer/models/workout.dart';
 import 'package:myfitnesstrainer/screens/loading_screen.dart';
 import 'package:myfitnesstrainer/screens/trainer/edit_workout.dart';
@@ -8,18 +9,25 @@ import 'package:myfitnesstrainer/viewmodel/create_workout_planviewmodel.dart';
 import 'package:myfitnesstrainer/viewmodel/trainer_data_viewmodel.dart';
 import 'package:provider/provider.dart';
 import 'package:myfitnesstrainer/models/workout_plan.dart';
-enum Mode{EDITING,NEW}
+
+enum Mode { EDITING, NEW, ASSIGNING }
+
 class CreateWorkoutPlanPage extends StatelessWidget {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
   Mode _state;
 
   WorkoutPlan workoutPlan;
-  CreateWorkoutPlanPage({this.workoutPlan}){
-      if(workoutPlan==null)
-        _state=Mode.NEW;
-      else _state=Mode.EDITING;
-    
+  StudentData studentData;
+  CreateWorkoutPlanPage({this.workoutPlan, this.studentData}) {
+    if (workoutPlan == null)
+      _state = Mode.NEW;
+    else {
+      if (studentData == null)
+        _state = Mode.EDITING;
+      else
+        _state = Mode.ASSIGNING;
+    }
   }
   bool isExec = false;
   TextEditingController _editingController;
@@ -50,7 +58,7 @@ class CreateWorkoutPlanPage extends StatelessWidget {
             if (value.length > 30)
               return "Antrenman adı çok uzun";
             else
-              null;
+              return null;
           },
           autofocus: false,
           controller: _editingController,
@@ -104,8 +112,7 @@ class CreateWorkoutPlanPage extends StatelessWidget {
   }
 
   Widget build(BuildContext context) {
-    TrainerDataModel trainerDataModel =
-        locator<TrainerDataModel>();
+    TrainerDataModel trainerDataModel = locator<TrainerDataModel>();
     return ChangeNotifierProvider(
         create: (context) => CreateWorkoutPlanModel(workoutPlan: workoutPlan),
         child: Consumer<CreateWorkoutPlanModel>(
@@ -126,22 +133,33 @@ class CreateWorkoutPlanPage extends StatelessWidget {
                               onPressed: () {
                                 if (_formKey.currentState.validate()) {
                                   _formKey.currentState.save();
-                            //      createWorkoutPlanModel.workoutPlan.creator =
-                            //          userModel.user;
-                                  createWorkoutPlanModel.workoutPlan.workouts =
-                                      createWorkoutPlanModel.workouts;
+                                  //      createWorkoutPlanModel.workoutPlan.creator =
+                                  //          userModel.user;
 
                                   createWorkoutPlanModel.loadState =
                                       LoadState.Loading;
-                                  if(_state==Mode.NEW)
-                                  trainerDataModel.addWorkout(
-                                      createWorkoutPlanModel.workoutPlan);
-                                  else
-                                  
-                                  trainerDataModel.updateWorkout(
-                                      createWorkoutPlanModel.workoutPlan);
+                                  if (_state == Mode.NEW) {
+                                    createWorkoutPlanModel
+                                            .workoutPlan.workouts =
+                                        createWorkoutPlanModel.workouts;
+
+                                    trainerDataModel.addWorkout(
+                                        createWorkoutPlanModel.workoutPlan);
+                                    Navigator.pop(context);
+                                  } else if (_state == Mode.EDITING) {
+                                    createWorkoutPlanModel
+                                            .workoutPlan.workouts =
+                                        createWorkoutPlanModel.workouts;
+
+                                    trainerDataModel.updateWorkout(
+                                        createWorkoutPlanModel.workoutPlan);
+                                  } else {
+                                    trainerDataModel.assignWorkoutPlan(
+                                        workoutPlan, studentData);
+                                    Navigator.popUntil(
+                                        context, (route) => route.isFirst);
+                                  }
                                   //                     createWorkoutPlanModel.saveWorkoutPlan();
-                                  Navigator.pop(context);
                                 }
                               },
                             )

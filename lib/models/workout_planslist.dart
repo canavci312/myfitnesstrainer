@@ -2,7 +2,7 @@ import 'package:myfitnesstrainer/models/workout_plan.dart';
 
 class WorkoutPlansList {
   List<WorkoutPlan> workoutPlans;
-  List get getWorkoutPlans => workoutPlans;
+  List<WorkoutPlan> get getWorkoutPlans => workoutPlans;
 
   WorkoutPlansList() {
     workoutPlans = [];
@@ -18,7 +18,7 @@ class WorkoutPlansList {
     List<WorkoutPlan> workoutPlanList =
         list.map((i) => WorkoutPlan.fromMap(i)).toList();
 
-    this.workoutPlans = workoutPlanList;    
+    this.workoutPlans = workoutPlanList;
   }
   firestoreWorkoutPlansList() {
     List<Map<String, dynamic>> convertedWorkoutPlansList = [];

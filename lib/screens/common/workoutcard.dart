@@ -52,8 +52,11 @@ class WorkoutCard extends StatelessWidget {
                     padding: const EdgeInsets.only(left: 14.0, bottom: 8.0),
                     child: Row(
                       children: <Widget>[
-                        Text(_workoutPlan.workouts.length.toString()+" günlük antrenman",style: TextStyle(color: Colors.white70),),
-                        
+                        Text(
+                          _workoutPlan.workoutDayCount().toString() +
+                              " günlük antrenman",
+                          style: TextStyle(color: Colors.white70),
+                        ),
                       ],
                     ),
                   )
