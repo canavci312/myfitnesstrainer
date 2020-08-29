@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:myfitnesstrainer/locator.dart';
 import 'package:myfitnesstrainer/screens/rootpage.dart';
+import 'package:myfitnesstrainer/viewmodel/all_workout_logs_viewmodel.dart';
 import 'package:myfitnesstrainer/viewmodel/student_data.viewmodel.dart';
 import 'package:myfitnesstrainer/viewmodel/trainer_data_viewmodel.dart';
 import 'package:myfitnesstrainer/viewmodel/userviewmodel.dart';
@@ -17,16 +19,18 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => locator<UserModel>(),
-//      child: ChangeNotifierProvider(
-//        create: (context) => locator<WorkoutPlansListViewModel>(),
-     child: ChangeNotifierProvider(
+      child: ChangeNotifierProvider(
         create: (context) => locator<TrainerDataModel>(),
-     child: ChangeNotifierProvider(
-        create: (context) => locator<StudentDataModel>(),
-
-                  child: MaterialApp(
+        child: ChangeNotifierProvider(
+          create: (context) => locator<StudentDataModel>(),
+          child: ChangeNotifierProvider(
+          create: (context) => locator<AllWorkoutLogsModel>(),
+          child: MaterialApp(
+            localizationsDelegates: [GlobalMaterialLocalizations.delegate],
+            supportedLocales: [const Locale('en'), const Locale('tr')],
             title: 'Flutter Demo',
             theme: ThemeData(
+              scaffoldBackgroundColor: Colors.grey[200],
               // This is the theme of your application.
               //
               // Try running your application with "flutter run". You'll see the
@@ -45,7 +49,7 @@ class MyApp extends StatelessWidget {
             home: RootPage(),
           ),
         ),
-     ),
+      ),)
     );
   }
 }

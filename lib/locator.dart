@@ -3,6 +3,7 @@ import 'package:myfitnesstrainer/repository/user_repository.dart';
 import 'package:myfitnesstrainer/services/auth_service.dart';
 import 'package:myfitnesstrainer/services/firestore_services.dart';
 import 'package:myfitnesstrainer/services/sqflite_services.dart';
+import 'package:myfitnesstrainer/viewmodel/all_workout_logs_viewmodel.dart';
 import 'package:myfitnesstrainer/viewmodel/exercises_viewmodel.dart';
 import 'package:myfitnesstrainer/viewmodel/student_data.viewmodel.dart';
 import 'package:myfitnesstrainer/viewmodel/trainer_data_viewmodel.dart';
@@ -19,4 +20,5 @@ void setupLocator() {
   locator.registerLazySingleton(() => ExerciseViewModel());
   locator.registerLazySingleton(() => TrainerDataModel());
   locator.registerLazySingleton(() => StudentDataModel());
+  locator.registerLazySingleton(() => AllWorkoutLogsModel());
 }

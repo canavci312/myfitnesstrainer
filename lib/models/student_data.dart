@@ -1,10 +1,12 @@
 import 'package:myfitnesstrainer/models/measurement.dart';
+import 'package:myfitnesstrainer/models/student_other_information.dart';
 import 'package:myfitnesstrainer/models/user.dart';
 import 'package:myfitnesstrainer/models/workout_plan.dart';
 
 class StudentData {
   User _user;
   WorkoutPlan _workoutPlan = WorkoutPlan();
+  StudentOtherInformation studentOtherInformation = StudentOtherInformation();
   Measurement recentMeasurement;
   Measurement lastMeasurement;
   User _coach;
@@ -32,6 +34,8 @@ class StudentData {
     _coach = User.setFromMap(map['coach']);
     recentMeasurement = Measurement.fromMap(map['recentMeasurement']);
     lastMeasurement = Measurement.fromMap(map['lastMeasurement']);
+    studentOtherInformation =
+        StudentOtherInformation.fromMap(map['studentOtherInformation']);
   }
   Map<String, dynamic> toMap() {
     return {
@@ -45,6 +49,9 @@ class StudentData {
       if (recentMeasurement == null) 'recentMeasurement': null,
       if (lastMeasurement != null) 'lastMeasurement': lastMeasurement.toMap(),
       if (lastMeasurement == null) 'lastMeasurement': null,
+      if (studentOtherInformation != null)
+        'studentOtherInformation': studentOtherInformation.toMap(),
+      if (studentOtherInformation == null) 'studentOtherInformation': null,
     };
   }
 
@@ -58,6 +65,9 @@ class StudentData {
       if (recentMeasurement == null) 'recentMeasurement': null,
       if (lastMeasurement != null) 'lastMeasurement': lastMeasurement.toMap(),
       if (lastMeasurement == null) 'lastMeasurement': null,
+      if (studentOtherInformation != null)
+        'studentOtherInformation': studentOtherInformation.toMap(),
+      if (studentOtherInformation == null) 'studentOtherInformation': null,
     };
   }
 
@@ -66,5 +76,7 @@ class StudentData {
     _workoutPlan = WorkoutPlan.fromMap(map['workoutPlan']);
     recentMeasurement = Measurement.fromMap(map['recentMeasurement']);
     lastMeasurement = Measurement.fromMap(map['lastMeasurement']);
+    studentOtherInformation =
+        StudentOtherInformation.fromMap(map['studentOtherInformation']);
   }
 }

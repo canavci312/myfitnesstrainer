@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:myfitnesstrainer/models/all_workout_logs.dart';
 import 'package:myfitnesstrainer/models/student_data.dart';
 import 'package:myfitnesstrainer/models/trainer_data.dart';
 import 'package:myfitnesstrainer/models/user.dart';
@@ -35,10 +36,10 @@ class FirestoreDBService {
           .collection("students")
           .document(studentData.getUser.userID)
           .setData(studentData.toMap());
-       DocumentSnapshot _okunanStudentData =
-        await Firestore.instance.document("students/$userID").get(); 
-            studentData = new StudentData.fromMap(_okunanStudentData.data);
-      return studentData;  
+      DocumentSnapshot _okunanStudentData =
+          await Firestore.instance.document("students/$userID").get();
+      studentData = new StudentData.fromMap(_okunanStudentData.data);
+      return studentData;
     } else {
       studentData = new StudentData.fromMap(_okunanStudentData.data);
       return studentData;
@@ -60,15 +61,34 @@ class FirestoreDBService {
       return trainerData;
     }
   }
-    Future<TrainerData> getTrainerData(String userID) async {
+
+  Future<TrainerData> getTrainerData(String userID) async {
     DocumentSnapshot _okunanTrainerData =
         await Firestore.instance.document("trainers/$userID").get();
-  
-      var trainerData = new TrainerData.fromMap(_okunanTrainerData.data);
-      return trainerData;
-    }
-  
 
+    var trainerData = new TrainerData.fromMap(_okunanTrainerData.data);
+    return trainerData;
+  }
+
+  Future<void> saveWorkoutLog(AllWorkoutLogs allWorkoutLogs, User user) async {
+    String userID = user.userID;
+
+    await _firebaseDB
+        .collection("workout_logs")
+        .document(userID)
+        .setData(allWorkoutLogs.toMap());
+  }
+
+  Future<AllWorkoutLogs> getWorkoutLogs(User user) async {
+    String userID = user.userID;
+
+    DocumentSnapshot _okunanWorkoutLogsData =
+        await Firestore.instance.document("workout_logs/$userID").get();
+    if (_okunanWorkoutLogsData.data == null) {
+      return AllWorkoutLogs();
+    } else
+      return AllWorkoutLogs.fromMap(_okunanWorkoutLogsData.data);
+  }
 
   Future<void> saveStudentData(StudentData studentData) async {
     String userID = studentData.getUser.userID;

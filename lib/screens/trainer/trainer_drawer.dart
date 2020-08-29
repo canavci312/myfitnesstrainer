@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:myfitnesstrainer/viewmodel/student_data.viewmodel.dart';
+import 'package:myfitnesstrainer/viewmodel/trainer_data_viewmodel.dart';
 import 'package:myfitnesstrainer/viewmodel/userviewmodel.dart';
 import 'package:provider/provider.dart';
 
@@ -8,6 +10,8 @@ class TrainerDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     UserModel userModel = Provider.of<UserModel>(context);
+    final _trainerModel = Provider.of<TrainerDataModel>(context, listen: true);
+    final _studentModel = Provider.of<StudentDataModel>(context, listen: true);
     print(userModel.user.toString());
     return Drawer(
       child: ListView(
@@ -20,7 +24,6 @@ class TrainerDrawer extends StatelessWidget {
             ),
             accountEmail: Text(userModel.user.email),
             accountName: Text(userModel.user.name),
-            
             currentAccountPicture: CircleAvatar(
               backgroundImage: NetworkImage(
                 userModel.user.imageUrl,
@@ -40,11 +43,17 @@ class TrainerDrawer extends StatelessWidget {
             title: Text('Eğitmenler'),
           ),
           GestureDetector(
-            onTap: (){
+            onTap: () {
+              _trainerModel.reset();
+              _studentModel.reset();
               userModel.signOut();
             },
-                      child: Align(alignment:Alignment.bottomCenter,child: ListTile(leading: Icon(Icons.exit_to_app),
-              title: Text('Çıkış yap'),)),
+            child: Align(
+                alignment: Alignment.bottomCenter,
+                child: ListTile(
+                  leading: Icon(Icons.exit_to_app),
+                  title: Text('Çıkış yap'),
+                )),
           )
         ],
       ),

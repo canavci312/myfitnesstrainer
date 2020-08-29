@@ -31,13 +31,23 @@ class Measurement {
   Measurement.fromMap(Map<String, dynamic> map) {
     if (map != null) {
       this.date = (map['date'].toDate());
-      this.weight = map['weight'];
-      this.arm = map['arm'];
-      this.waist = map['waist'];
+      if (map['weight'] != null) {
+        this.weight = map['weight'].toDouble();
+        this.arm = map['arm'].toDouble() ?? null;
+        this.waist = map['waist'].toDouble() ?? null;
 
-      this.neck = map['neck'];
-      this.hip = map['hip'];
-      this.height = map['height'];
+        this.neck = map['neck'].toDouble() ?? null;
+        this.hip = map['hip'].toDouble() ?? null;
+        this.height = map['height'].toDouble() ?? null;
+      } else {
+        this.weight = null;
+        this.arm = null;
+        this.waist = null;
+
+        this.neck = null;
+        this.hip = null;
+        this.height = null;
+      }
     }
   }
 }

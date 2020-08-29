@@ -3,6 +3,7 @@ import 'package:myfitnesstrainer/screens/loading_screen.dart';
 import 'package:myfitnesstrainer/screens/login_screen.dart';
 import 'package:myfitnesstrainer/screens/student/student_home.dart';
 import 'package:myfitnesstrainer/screens/trainer/trainer_home.dart';
+import 'package:myfitnesstrainer/viewmodel/all_workout_logs_viewmodel.dart';
 import 'package:myfitnesstrainer/viewmodel/student_data.viewmodel.dart';
 import 'package:myfitnesstrainer/viewmodel/trainer_data_viewmodel.dart';
 import 'package:myfitnesstrainer/viewmodel/userviewmodel.dart';
@@ -14,6 +15,7 @@ class RootPage extends StatelessWidget {
     final _userModel = Provider.of<UserModel>(context, listen: true);
     final _trainerModel = Provider.of<TrainerDataModel>(context, listen: true);
     final _studentModel = Provider.of<StudentDataModel>(context, listen: true);
+
     if (_userModel.state == ViewState.Idle) {
       if (_userModel.user != null) {
         if (_userModel.user.trainer == true) {
@@ -28,8 +30,15 @@ class RootPage extends StatelessWidget {
           if (_studentModel.state != StudentDataState.Idle) {
             _studentModel.checkStudentData(_userModel.user);
             return LoadingScreen();
-          } else
-            return StudentHomePage();
+          } else {
+            final _allWorkoutLogs =
+                Provider.of<AllWorkoutLogsModel>(context, listen: true);
+            if (_allWorkoutLogs.state == LogsState.Loading) {
+              _allWorkoutLogs.loadWorkoutLogs();
+              return LoadingScreen();
+            } else
+              return StudentHomePage();
+          }
           //else return LoadingScreen();
         }
       } else

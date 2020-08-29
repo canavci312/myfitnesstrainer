@@ -6,6 +6,7 @@ import 'package:myfitnesstrainer/models/user.dart';
 import 'package:myfitnesstrainer/models/workout_plan.dart';
 import 'package:myfitnesstrainer/models/workout_planslist.dart';
 import 'package:myfitnesstrainer/services/firestore_services.dart';
+import 'package:myfitnesstrainer/viewmodel/userviewmodel.dart';
 
 enum TrainerDataState { Idle, Busy }
 
@@ -13,6 +14,7 @@ class TrainerDataModel with ChangeNotifier {
   TrainerDataState _state = TrainerDataState.Busy;
   TrainerData trainerData = TrainerData();
   WorkoutPlansList workoutPlansList = WorkoutPlansList();
+  UserModel _userModel = locator<UserModel>();
 
   FirestoreDBService _firestoreDBService = locator<FirestoreDBService>();
   TrainerDataModel();
@@ -25,6 +27,12 @@ class TrainerDataModel with ChangeNotifier {
         "workoutPlanList:" +
         trainerData.workoutPlans.toString());
     state = TrainerDataState.Idle;
+  }
+
+  reset() {
+    trainerData = TrainerData();
+    workoutPlansList = WorkoutPlansList();
+    state = TrainerDataState.Busy;
   }
 
   TrainerDataState get state => _state;
@@ -54,6 +62,7 @@ class TrainerDataModel with ChangeNotifier {
   Future<void> assignWorkoutPlan(
       WorkoutPlan workoutPlan, StudentData studentData) async {
     studentData.setWorkoutPlan = workoutPlan;
+    studentData.setCoach = _userModel.user;
     trainerData.studentList.forEach((element) {
       if (element.getUser.userID == studentData.getUser.userID) {
         trainerData.studentList.remove(element);

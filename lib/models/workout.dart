@@ -32,6 +32,25 @@ class Workout {
     };
   }
 
+  int calculateWorkoutTime() {
+    int totalDuration = 0;
+    if (!rest) {
+      exerciseTargetsList.forEach((exerciseTarget) {
+        if (exerciseTarget.repBased) {
+          totalDuration = totalDuration +
+              (exerciseTarget.setCount * exerciseTarget.maxRep * 3) +
+              (exerciseTarget.setCount * exerciseTarget.rest);
+        } else {
+          totalDuration = totalDuration +
+              (exerciseTarget.setCount * exerciseTarget.duration) +
+              (exerciseTarget.setCount * exerciseTarget.rest);
+        }
+      });
+    }
+
+    return totalDuration;
+  }
+
   Workout.fromMap(Map<String, dynamic> map) {
     this.rest = map['rest'];
 

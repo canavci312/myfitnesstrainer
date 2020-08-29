@@ -153,6 +153,7 @@ class CreateWorkoutPlanPage extends StatelessWidget {
 
                                     trainerDataModel.updateWorkout(
                                         createWorkoutPlanModel.workoutPlan);
+                                    Navigator.pop(context);
                                   } else {
                                     trainerDataModel.assignWorkoutPlan(
                                         workoutPlan, studentData);
