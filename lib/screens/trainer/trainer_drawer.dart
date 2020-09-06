@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myfitnesstrainer/viewmodel/all_workout_logs_viewmodel.dart';
 import 'package:myfitnesstrainer/viewmodel/student_data.viewmodel.dart';
 import 'package:myfitnesstrainer/viewmodel/trainer_data_viewmodel.dart';
 import 'package:myfitnesstrainer/viewmodel/userviewmodel.dart';
@@ -12,6 +13,8 @@ class TrainerDrawer extends StatelessWidget {
     UserModel userModel = Provider.of<UserModel>(context);
     final _trainerModel = Provider.of<TrainerDataModel>(context, listen: true);
     final _studentModel = Provider.of<StudentDataModel>(context, listen: true);
+    final _allWorkoutLog =
+        Provider.of<AllWorkoutLogsModel>(context, listen: true);
     print(userModel.user.toString());
     return Drawer(
       child: ListView(
@@ -46,6 +49,7 @@ class TrainerDrawer extends StatelessWidget {
             onTap: () {
               _trainerModel.reset();
               _studentModel.reset();
+              _allWorkoutLog.reset();
               userModel.signOut();
             },
             child: Align(

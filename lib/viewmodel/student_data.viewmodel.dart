@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myfitnesstrainer/locator.dart';
 import 'package:myfitnesstrainer/models/measurement.dart';
+import 'package:myfitnesstrainer/models/message.dart';
 import 'package:myfitnesstrainer/models/student_data.dart';
 import 'package:myfitnesstrainer/models/student_other_information.dart';
 import 'package:myfitnesstrainer/models/user.dart';
@@ -101,5 +102,13 @@ class StudentDataModel with ChangeNotifier {
   set state(StudentDataState value) {
     _state = value;
     notifyListeners();
+  }
+
+  Stream<List<Message>> getMessages(String userID, String otherUserID) {
+    return _firestoreDBService.getMessages(userID, otherUserID);
+  }
+
+  Future<bool> saveMessage(Message messageSent) async {
+    return _firestoreDBService.saveMessage(messageSent);
   }
 }

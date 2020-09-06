@@ -44,18 +44,18 @@ class ExerciseTargets {
     String str;
     if (repBased) {
       str = setCount.toString() +
-          " set " +
+          " set x " +
           minRep.toString() +
           "-" +
           maxRep.toString() +
-          " tekrar " +
+          " tekrar, " +
           rest.toString() +
           " sn dinlenme";
     } else {
       str = setCount.toString() +
-          " set " +
+          " set x " +
           duration.toString() +
-          " sn" +
+          " sn, " +
           rest.toString() +
           " sn dinlenme";
     }

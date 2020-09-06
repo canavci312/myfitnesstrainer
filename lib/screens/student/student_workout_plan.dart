@@ -8,7 +8,7 @@ class StudentWorkoutPlanPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    PageController controller = PageController();
+
     return Consumer<StudentDataModel>(
         builder: (context, studentDataModel, child) {
       if (studentDataModel.studentData.getCoach.userID == null) {

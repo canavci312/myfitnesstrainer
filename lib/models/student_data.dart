@@ -1,4 +1,5 @@
 import 'package:myfitnesstrainer/models/measurement.dart';
+import 'package:myfitnesstrainer/models/nutrition_plan.dart';
 import 'package:myfitnesstrainer/models/student_other_information.dart';
 import 'package:myfitnesstrainer/models/user.dart';
 import 'package:myfitnesstrainer/models/workout_plan.dart';
@@ -7,6 +8,7 @@ class StudentData {
   User _user;
   WorkoutPlan _workoutPlan = WorkoutPlan();
   StudentOtherInformation studentOtherInformation = StudentOtherInformation();
+  NutritionPlan nutritionPlan;
   Measurement recentMeasurement;
   Measurement lastMeasurement;
   User _coach;
@@ -36,6 +38,7 @@ class StudentData {
     lastMeasurement = Measurement.fromMap(map['lastMeasurement']);
     studentOtherInformation =
         StudentOtherInformation.fromMap(map['studentOtherInformation']);
+    nutritionPlan = NutritionPlan.fromMap(map['nutritionPlan']);
   }
   Map<String, dynamic> toMap() {
     return {
@@ -52,6 +55,8 @@ class StudentData {
       if (studentOtherInformation != null)
         'studentOtherInformation': studentOtherInformation.toMap(),
       if (studentOtherInformation == null) 'studentOtherInformation': null,
+      if (nutritionPlan != null) 'nutritionPlan': nutritionPlan.toMap(),
+      if (nutritionPlan == null) 'nutritionPlan': null,
     };
   }
 
@@ -68,6 +73,8 @@ class StudentData {
       if (studentOtherInformation != null)
         'studentOtherInformation': studentOtherInformation.toMap(),
       if (studentOtherInformation == null) 'studentOtherInformation': null,
+      if (nutritionPlan != null) 'nutritionPlan': nutritionPlan.toMap(),
+      if (nutritionPlan == null) 'nutritionPlan': null,
     };
   }
 
@@ -78,5 +85,6 @@ class StudentData {
     lastMeasurement = Measurement.fromMap(map['lastMeasurement']);
     studentOtherInformation =
         StudentOtherInformation.fromMap(map['studentOtherInformation']);
+    nutritionPlan = NutritionPlan.fromMap(map['nutritionPlan']);
   }
 }

@@ -19,6 +19,11 @@ class AllWorkoutLogsModel with ChangeNotifier {
     notifyListeners();
   }
 
+  reset() {
+    _state = LogsState.Loading;
+    allWorkoutLogs = AllWorkoutLogs();
+  }
+
   Future<void> loadWorkoutLogs() async {
     allWorkoutLogs = await _firestoreDBService.getWorkoutLogs(_userModel.user);
     state = LogsState.Idle;

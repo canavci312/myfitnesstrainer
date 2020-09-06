@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:myfitnesstrainer/models/all_workout_logs.dart';
+import 'package:myfitnesstrainer/models/message.dart';
 import 'package:myfitnesstrainer/models/student_data.dart';
 import 'package:myfitnesstrainer/models/trainer_data.dart';
 import 'package:myfitnesstrainer/models/user.dart';
@@ -149,5 +150,38 @@ class FirestoreDBService {
     } catch (e) {
       print(e);
     }
+  }
+
+  Future<bool> saveMessage(Message message) async {
+    var _kaydedilecekMesajMapYapisi = message.toMap();
+
+    await _firebaseDB
+        .collection("conversations")
+        .document(message.sentFrom)
+        .collection(message.sentTo)
+        .document()
+        .setData(_kaydedilecekMesajMapYapisi);
+
+    await _firebaseDB
+        .collection("conversations")
+        .document(message.sentTo)
+        .collection(message.sentFrom)
+        .document()
+        .setData(_kaydedilecekMesajMapYapisi);
+
+    return true;
+  }
+
+  Stream<List<Message>> getMessages(
+      String currentUserID, String sohbetEdilenUserID) {
+    var snapShot = _firebaseDB
+        .collection("conversations")
+        .document(currentUserID)
+        .collection(sohbetEdilenUserID)
+        .orderBy("date", descending: true)
+        .snapshots();
+    return snapShot.map((mesajListesi) => mesajListesi.documents
+        .map((mesaj) => Message.fromMap(mesaj.data))
+        .toList());
   }
 }

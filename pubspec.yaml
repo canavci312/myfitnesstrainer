@@ -43,7 +43,8 @@ dependencies:
   expandable: ^4.1.4
   intl: ^0.16.1
   timeago: ^2.0.27
-
+  vibration: ^1.4.0
+  firestore_ui: ^1.10.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -64,6 +65,7 @@ flutter:
      - db/gymapp.db
      - 5x5workout.jpg
      - armspecilization.jpeg
+     - meyve_tabagi.jpg
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

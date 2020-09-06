@@ -86,20 +86,36 @@ class WorkoutSummary extends StatelessWidget {
                               itemCount: workoutLogs
                                   .exerciseLogs[index1].setLogs.length,
                               itemBuilder: (BuildContext context, int index2) {
-                                return Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text("Set " +
-                                      (index2 + 1).toString() +
-                                      " " +
-                                      workoutLogs.exerciseLogs[index1]
-                                          .setLogs[index2].weight
-                                          .toString() +
-                                      " kilo " +
-                                      workoutLogs.exerciseLogs[index1]
-                                          .setLogs[index2].reps
-                                          .toString() +
-                                      " tekrar"),
-                                );
+                                return _workout
+                                        .exerciseTargetsList[index1].repBased
+                                    ? Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text("Set " +
+                                            (index2 + 1).toString() +
+                                            " " +
+                                            workoutLogs.exerciseLogs[index1]
+                                                .setLogs[index2].weight
+                                                .toString() +
+                                            " kilo " +
+                                            workoutLogs.exerciseLogs[index1]
+                                                .setLogs[index2].reps
+                                                .toString() +
+                                            " tekrar"),
+                                      )
+                                    : Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text("Set " +
+                                            (index2 + 1).toString() +
+                                            " " +
+                                            workoutLogs.exerciseLogs[index1]
+                                                .setLogs[index2].weight
+                                                .toString() +
+                                            " kilo " +
+                                            workoutLogs.exerciseLogs[index1]
+                                                .setLogs[index2].duration
+                                                .toString() +
+                                            " saniye"),
+                                      );
                               },
                             ),
                           ),

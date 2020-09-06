@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myfitnesstrainer/locator.dart';
+import 'package:myfitnesstrainer/models/nutrition_plan.dart';
+import 'package:myfitnesstrainer/models/nutrition_planslist.dart';
 import 'package:myfitnesstrainer/models/student_data.dart';
 import 'package:myfitnesstrainer/models/trainer_data.dart';
 import 'package:myfitnesstrainer/models/user.dart';
@@ -13,7 +15,9 @@ enum TrainerDataState { Idle, Busy }
 class TrainerDataModel with ChangeNotifier {
   TrainerDataState _state = TrainerDataState.Busy;
   TrainerData trainerData = TrainerData();
+
   WorkoutPlansList workoutPlansList = WorkoutPlansList();
+  // NutritionPlansList nutritionPlansList = NutritionPlansList();
   UserModel _userModel = locator<UserModel>();
 
   FirestoreDBService _firestoreDBService = locator<FirestoreDBService>();
@@ -48,6 +52,17 @@ class TrainerDataModel with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> addNutrition(NutritionPlan nutritionPlan) async {
+    trainerData.nutritionPlansList.nutritionPlans.add(nutritionPlan);
+    await _firestoreDBService.saveTrainerData(trainerData);
+    notifyListeners();
+  }
+
+  Future<void> updateNutrition() async {
+    await _firestoreDBService.saveTrainerData(trainerData);
+    notifyListeners();
+  }
+
   Future<void> updateWorkout(WorkoutPlan workoutPlan) async {
     await _firestoreDBService.saveTrainerData(trainerData);
     notifyListeners();
@@ -55,6 +70,27 @@ class TrainerDataModel with ChangeNotifier {
 
   Future<void> removeWorkout(WorkoutPlan workoutPlan) async {
     trainerData.workoutPlans.workoutPlans.remove(workoutPlan);
+    await _firestoreDBService.saveTrainerData(trainerData);
+    notifyListeners();
+  }
+
+  Future<void> removeNutrition(NutritionPlan nutritionPlan) async {
+    trainerData.workoutPlans.workoutPlans.remove(nutritionPlan);
+    await _firestoreDBService.saveTrainerData(trainerData);
+    notifyListeners();
+  }
+
+  Future<void> assignNutritionPlan(
+      NutritionPlan nutritionPlan, StudentData studentData) async {
+    studentData.nutritionPlan = nutritionPlan;
+    studentData.setCoach = _userModel.user;
+    trainerData.studentList.forEach((element) {
+      if (element.getUser.userID == studentData.getUser.userID) {
+        trainerData.studentList.remove(element);
+        trainerData.studentList.add(studentData);
+      }
+    });
+    await _firestoreDBService.saveStudentData(studentData);
     await _firestoreDBService.saveTrainerData(trainerData);
     notifyListeners();
   }

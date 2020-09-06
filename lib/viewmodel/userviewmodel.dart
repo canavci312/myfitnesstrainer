@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myfitnesstrainer/locator.dart';
+import 'package:myfitnesstrainer/models/message.dart';
 import 'package:myfitnesstrainer/models/user.dart';
 import 'package:myfitnesstrainer/repository/user_repository.dart';
 
@@ -29,10 +30,11 @@ class UserModel with ChangeNotifier {
     try {
       state = ViewState.Busy;
       _user = await _userRepository.currentUser();
-      if (_user != null){
-        return _user;}
-      else{
-        return null;}
+      if (_user != null) {
+        return _user;
+      } else {
+        return null;
+      }
     } catch (e) {
       debugPrint("Viewmodeldeki current user hata:" + e.toString());
       return null;

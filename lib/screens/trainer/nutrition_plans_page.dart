@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:myfitnesstrainer/screens/common/workoutcard.dart';
+import 'package:myfitnesstrainer/screens/common/nutritioncard.dart';
 import 'package:myfitnesstrainer/viewmodel/trainer_data_viewmodel.dart';
 import 'package:provider/provider.dart';
 
-class WorkoutPlansPage extends StatelessWidget {
-  const WorkoutPlansPage({Key key}) : super(key: key);
-
+class NutritionPlansPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<TrainerDataModel>(
@@ -19,12 +17,12 @@ class WorkoutPlansPage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(top: 14.0, left: 18),
             child: Text(
-              "Hazırladığınız Antrenman Programları",
+              "Hazırladığınız Diyet Programları",
               style:
                   TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
             ),
           ),
-          if (trainerDataModel.trainerData.workoutPlans != null)
+          if (trainerDataModel.trainerData.nutritionPlansList != null)
             Container(
               height: 150,
               constraints: BoxConstraints(minHeight: 200, maxHeight: 200),
@@ -32,10 +30,10 @@ class WorkoutPlansPage extends StatelessWidget {
                   shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
                   itemCount: trainerDataModel
-                      .trainerData.workoutPlans.workoutPlans.length,
+                      .trainerData.nutritionPlansList.nutritionPlans.length,
                   itemBuilder: (BuildContext context, int index) {
-                    return WorkoutCard(trainerDataModel
-                        .trainerData.workoutPlans.workoutPlans[index]);
+                    return NutritionCard(trainerDataModel
+                        .trainerData.nutritionPlansList.nutritionPlans[index]);
                   }),
             ),
         ],

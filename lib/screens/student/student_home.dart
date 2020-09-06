@@ -1,15 +1,14 @@
-
 import 'package:flutter/material.dart';
+import 'package:myfitnesstrainer/screens/student/student_chat_page.dart';
 import 'package:myfitnesstrainer/screens/student/student_nutrition_plan.dart';
 import 'package:myfitnesstrainer/screens/student/student_progress.dart';
 import 'package:myfitnesstrainer/screens/student/student_upload.dart';
 import 'package:myfitnesstrainer/screens/student/student_workout_plan.dart';
 import 'package:outline_material_icons/outline_material_icons.dart';
-import 'package:myfitnesstrainer/screens/common/inbox_page.dart';
 
 import 'package:myfitnesstrainer/screens/trainer/trainer_drawer.dart';
-class StudentHomePage extends StatefulWidget {
 
+class StudentHomePage extends StatefulWidget {
   createState() {
     return StudentHomePageState();
   }
@@ -22,7 +21,7 @@ class StudentHomePageState extends State<StudentHomePage> {
   StudentWorkoutPlanPage _workoutPlanPage;
   StudentUploadPage _uploadPage;
   StudentProgressPage _progressPage;
-  InboxPage _inboxPage;
+  StudentChatPage _inboxPage;
   List<Widget> pages;
   Widget currentPage;
 
@@ -31,7 +30,7 @@ class StudentHomePageState extends State<StudentHomePage> {
     _nutritionPlanPage = StudentNutritionPlanPage();
     _uploadPage = StudentUploadPage();
     _progressPage = StudentProgressPage();
-    _inboxPage = InboxPage();
+    _inboxPage = StudentChatPage();
 
     pages = [
       _workoutPlanPage,
@@ -50,19 +49,20 @@ class StudentHomePageState extends State<StudentHomePage> {
   }
 
   Widget build(BuildContext context) {
-
     return Scaffold(
       drawer: TrainerDrawer(),
-      appBar: AppBar(
-        title: Text("Gymnopolis",
-            style: TextStyle(fontFamily: "Signatra", fontSize: 35)),
-      ),
+      appBar: currentPage == _inboxPage
+          ? null
+          : AppBar(
+              title: Text("Gymnopolis",
+                  style: TextStyle(fontFamily: "Signatra", fontSize: 35)),
+            ),
       body: currentPage, //currentPage,
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         selectedItemColor: Colors.black,
- //       unselectedItemColor: Colors.blueGrey,
-          showUnselectedLabels: true,
+        //       unselectedItemColor: Colors.blueGrey,
+        showUnselectedLabels: true,
 
         onTap: (int index) {
           setState(() {
@@ -75,32 +75,30 @@ class StudentHomePageState extends State<StudentHomePage> {
         // this will be set when a new tab is tapped
         items: [
           BottomNavigationBarItem(
-
-              icon: new Icon(Icons.directions_bike),
-              
-                       title: Container(),
-              ),
+            icon: new Icon(Icons.directions_bike),
+            title: Container(),
+          ),
           BottomNavigationBarItem(
-              icon: new Icon(Icons.local_dining),
-              title: Container(),
-        //                title: new Text('Beslenme'),
-              ),
+            icon: new Icon(Icons.local_dining),
+            title: Container(),
+            //                title: new Text('Beslenme'),
+          ),
           BottomNavigationBarItem(
-              icon: new Icon(OMIcons.addBox),
-              title: Container(),
+            icon: new Icon(OMIcons.addBox),
+            title: Container(),
             //            title: new Text('Upload'),
-              ),
+          ),
           BottomNavigationBarItem(
-              icon: new Icon(OMIcons.showChart), 
-              title: Container(),
-        //         title: new Text('Progress'),
-              ),
+            icon: new Icon(OMIcons.showChart),
+            title: Container(),
+            //         title: new Text('Progress'),
+          ),
           BottomNavigationBarItem(
-              icon: new Icon(Icons.mail),
-              title: Container(),
-        
-     //                  title: new Text('Gelen Kutusu'),
-              ),
+            icon: new Icon(Icons.mail),
+            title: Container(),
+
+            //                  title: new Text('Gelen Kutusu'),
+          ),
         ],
       ),
     );

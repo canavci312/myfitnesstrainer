@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:myfitnesstrainer/screens/common/inbox_page.dart';
+import 'package:myfitnesstrainer/screens/trainer/chat_list_page.dart';
+import 'package:myfitnesstrainer/screens/trainer/create_nutrition_plan.dart';
 import 'package:myfitnesstrainer/screens/trainer/create_workout_plan.dart';
+import 'package:myfitnesstrainer/screens/trainer/nutrition_plans_page.dart';
 import 'package:myfitnesstrainer/screens/trainer/overview_page.dart';
 import 'package:myfitnesstrainer/screens/trainer/trainer_drawer.dart';
 import 'package:myfitnesstrainer/screens/trainer/workout_plans_page.dart';
 import 'package:outline_material_icons/outline_material_icons.dart';
-
 
 class TrainerHomePage extends StatefulWidget {
   createState() {
@@ -17,19 +18,22 @@ class TrainerHomePage extends StatefulWidget {
 class TrainerHomePageState extends State<TrainerHomePage> {
   int _currentIndex = 0;
   OverviewPage _overviewPage;
+  NutritionPlansPage _nutritionPlansPage;
   WorkoutPlansPage _workoutPlansPage;
-  InboxPage _inboxPage;
+  ChatListPage _inboxPage;
   List<Widget> pages;
   Widget currentPage;
 
   List<String> pageNames;
   void initState() {
-    _overviewPage=OverviewPage();
+    _overviewPage = OverviewPage();
+    _nutritionPlansPage = NutritionPlansPage();
     _workoutPlansPage = WorkoutPlansPage();
-    _inboxPage = InboxPage();
+    _inboxPage = ChatListPage();
 
     pages = [
       _overviewPage,
+      _nutritionPlansPage,
       _workoutPlansPage,
       _inboxPage,
     ];
@@ -53,11 +57,21 @@ class TrainerHomePageState extends State<TrainerHomePage> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => CreateWorkoutPlanPage()));
+                        builder: (context) => CreateNutritionPlanPage()));
               },
               child: Icon(Icons.add),
             )
-          : null,
+          : _currentIndex == 2
+              ? FloatingActionButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => CreateWorkoutPlanPage()));
+                  },
+                  child: Icon(Icons.add),
+                )
+              : null,
 
       appBar: AppBar(
         title: Text("Gymnopolis",
@@ -79,6 +93,10 @@ class TrainerHomePageState extends State<TrainerHomePage> {
         // this will be set when a new tab is tapped
         items: [
           BottomNavigationBarItem(icon: new Icon(Icons.home), title: Container()
+              //         title: new Text('Antrenman'),
+              ),
+          BottomNavigationBarItem(
+              icon: new Icon(Icons.local_dining), title: Container()
               //         title: new Text('Antrenman'),
               ),
           BottomNavigationBarItem(

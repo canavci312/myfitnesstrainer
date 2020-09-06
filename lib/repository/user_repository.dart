@@ -1,4 +1,5 @@
 import 'package:myfitnesstrainer/locator.dart';
+import 'package:myfitnesstrainer/models/message.dart';
 import 'package:myfitnesstrainer/models/user.dart';
 import 'package:myfitnesstrainer/services/auth_base.dart';
 import 'package:myfitnesstrainer/services/auth_service.dart';
@@ -36,4 +37,5 @@ class UserRepository implements AuthBase {
   Future<bool> signOut() async {
     return await _firebaseAuthService.signOut();
   }
+
 }
