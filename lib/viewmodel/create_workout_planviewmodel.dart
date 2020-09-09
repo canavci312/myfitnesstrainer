@@ -113,4 +113,10 @@ class CreateWorkoutPlanModel with ChangeNotifier {
   String get name {
     return _workoutPlan.name;
   }
+
+  void saveDescription(String value) {
+    workoutPlan.description = value;
+    print(workoutPlan.description);
+    notifyListeners();
+  }
 }

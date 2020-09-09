@@ -69,7 +69,7 @@ class EditWorkout extends StatelessWidget {
             autovalidate: true,
             child: Scaffold(
                 appBar: AppBar(
-                  automaticallyImplyLeading: false,
+                  automaticallyImplyLeading: true,
                   title: Text("Antrenmanı Düzenle"),
                   actions: <Widget>[
                     IconButton(

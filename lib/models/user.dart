@@ -6,7 +6,6 @@ class User {
   bool admin = false;
   String name = "";
   DateTime createdAt;
-  DateTime updatedAt;
   String imageUrl = "";
   String email = "";
   User(
@@ -15,7 +14,6 @@ class User {
       this.admin,
       this.name,
       this.createdAt,
-      this.updatedAt,
       this.imageUrl,
       this.email});
 
@@ -28,7 +26,6 @@ class User {
       admin = map['admin'];
       trainer = map['trainer'];
       createdAt = (map['createdAt'] as Timestamp).toDate();
-      updatedAt = (map['updatedAt'] as Timestamp).toDate();
     }
   }
   /*firestoreStudentList() {
@@ -49,7 +46,7 @@ class User {
     this.admin = user2.admin;
     this.name = user2.name;
     this.createdAt = user2.createdAt;
-    this.updatedAt = user2.updatedAt;
+
     this.imageUrl = user2.imageUrl;
 
     return true;
@@ -87,7 +84,6 @@ class User {
       'admin': admin ?? false,
       'trainer': trainer ?? false,
       'createdAt': createdAt ?? FieldValue.serverTimestamp(),
-      'updatedAt': updatedAt ?? FieldValue.serverTimestamp(),
     };
   }
 

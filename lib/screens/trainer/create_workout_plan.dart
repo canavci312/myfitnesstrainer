@@ -3,6 +3,7 @@ import 'package:myfitnesstrainer/locator.dart';
 import 'package:myfitnesstrainer/models/student_data.dart';
 import 'package:myfitnesstrainer/models/workout.dart';
 import 'package:myfitnesstrainer/screens/loading_screen.dart';
+import 'package:myfitnesstrainer/screens/trainer/add_workoutplan_description.dart';
 import 'package:myfitnesstrainer/screens/trainer/edit_workout.dart';
 import 'package:myfitnesstrainer/screens/trainer/workoutday_tile.dart';
 import 'package:myfitnesstrainer/viewmodel/create_workout_planviewmodel.dart';
@@ -112,6 +113,7 @@ class CreateWorkoutPlanPage extends StatelessWidget {
   }
 
   Widget build(BuildContext context) {
+    print(workoutPlan.description);
     TrainerDataModel trainerDataModel = locator<TrainerDataModel>();
     return ChangeNotifierProvider(
         create: (context) => CreateWorkoutPlanModel(workoutPlan: workoutPlan),
@@ -264,13 +266,34 @@ class CreateWorkoutPlanPage extends StatelessWidget {
                           ),
                         ),
                         GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      AddWorkoutPlanDescription(
+                                          createWorkoutPlanModel)),
+                            );
+                          },
+                          child: Card(
+                            child: workoutPlan.description == null
+                                ? ListTile(
+                                    leading: Icon(Icons.add),
+                                    title: Text("Antrenman Açıklaması Ekle"))
+                                : ListTile(
+                                    leading: Icon(Icons.edit),
+                                    title:
+                                        Text("Antrenman Açıklamasını Düzenle")),
+                          ),
+                        ),
+                        /*              GestureDetector(
                           onTap: createWorkoutPlanModel.addRest,
                           child: Card(
                             child: ListTile(
                                 leading: Icon(Icons.add),
                                 title: Text("Dinlenme günü ekle")),
                           ),
-                        )
+                        )*/
                       ],
                     ),
                   )),

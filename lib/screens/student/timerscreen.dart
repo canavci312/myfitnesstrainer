@@ -13,7 +13,7 @@ class TimerScreen extends StatefulWidget {
 
 class _TimerScreenState extends State<TimerScreen> {
   Timer _timer;
-
+  int _value = 0;
   int _start = 5;
   @override
   void initState() {
@@ -29,9 +29,22 @@ class _TimerScreenState extends State<TimerScreen> {
         () {
           if (_start < 1) {
             timer.cancel();
+            startTimer2();
           } else {
             _start = _start - 1;
           }
+        },
+      ),
+    );
+  }
+
+  void startTimer2() {
+    const oneSec = const Duration(seconds: 1);
+    _timer = new Timer.periodic(
+      oneSec,
+      (Timer timer) => setState(
+        () {
+          _value = _value + 1;
         },
       ),
     );
@@ -45,7 +58,7 @@ class _TimerScreenState extends State<TimerScreen> {
   @override
   Widget build(BuildContext context) {
     return _start != 0
-        ? CupertinoAlertDialog(
+        ? AlertDialog(
             title: Text(
               "Hazırlanın!",
               style: TextStyle(fontSize: 40),
@@ -72,15 +85,15 @@ class _TimerScreenState extends State<TimerScreen> {
               textAlign: TextAlign.center,
             ),
             content: Text(
-              '$_start',
+              '$_value',
               style: TextStyle(fontSize: 40),
               textAlign: TextAlign.center,
             ),
             actions: <Widget>[
               FlatButton(
-                child: Text('Close me!'),
+                child: Text('Tamamla'),
                 onPressed: () {
-                  Navigator.of(context).pop();
+                  Navigator.of(context).pop(_value);
                 },
               )
             ],

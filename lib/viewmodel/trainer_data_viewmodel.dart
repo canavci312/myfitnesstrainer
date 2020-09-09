@@ -46,6 +46,13 @@ class TrainerDataModel with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> getTrainerData() async {
+    print("Trainer Data is Refreshed");
+    trainerData = await _firestoreDBService.getTrainerData(trainerData.userID);
+
+    notifyListeners();
+  }
+
   Future<void> addWorkout(WorkoutPlan workoutPlan) async {
     trainerData.workoutPlans.workoutPlans.add(workoutPlan);
     await _firestoreDBService.saveTrainerData(trainerData);

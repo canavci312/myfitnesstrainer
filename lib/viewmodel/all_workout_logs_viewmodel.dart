@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myfitnesstrainer/locator.dart';
-import 'package:myfitnesstrainer/models/all_workout_logs.dart';
+import 'package:myfitnesstrainer/models/workout_logslist.dart';
 import 'package:myfitnesstrainer/services/firestore_services.dart';
 import 'package:myfitnesstrainer/viewmodel/userviewmodel.dart';
 

@@ -1,24 +1,22 @@
 import 'package:myfitnesstrainer/models/workout.dart';
 import 'package:myfitnesstrainer/models/workout_logs.dart';
 
-class WorkoutLogsList {
-  String workoutName;
+class AllWorkoutLogs {
   List<WorkoutLogs> workoutLogs;
-  WorkoutLogsList() {
+  AllWorkoutLogs() {
     workoutLogs = [];
   }
 
   Map<String, dynamic> toMap() {
     var map = Map<String, dynamic>();
-    map['workoutName'] = workoutName;
     map['workoutLogs'] = firestoreExerciseLogs();
 
     return map;
+    
   }
 
-  WorkoutLogsList.fromMap(Map<String, dynamic> map) {
+  AllWorkoutLogs.fromMap(Map<String, dynamic> map) {
     if (map != null) {
-      this.workoutName = (map['workoutName']);
 
       var list = map['workoutLogs'] as List;
       if (list != null) {

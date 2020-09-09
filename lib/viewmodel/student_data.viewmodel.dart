@@ -5,8 +5,10 @@ import 'package:myfitnesstrainer/models/message.dart';
 import 'package:myfitnesstrainer/models/student_data.dart';
 import 'package:myfitnesstrainer/models/student_other_information.dart';
 import 'package:myfitnesstrainer/models/user.dart';
-import 'package:myfitnesstrainer/models/workout_plan.dart';
+import 'package:myfitnesstrainer/models/workout.dart';
 import 'package:myfitnesstrainer/services/firestore_services.dart';
+import 'package:myfitnesstrainer/viewmodel/all_workout_logs_viewmodel.dart';
+import 'package:myfitnesstrainer/viewmodel/measurement_logs_viewmodel.dart';
 import 'package:myfitnesstrainer/viewmodel/trainer_data_viewmodel.dart';
 
 enum StudentDataState { Idle, Busy }
@@ -15,8 +17,13 @@ class StudentDataModel with ChangeNotifier {
   StudentDataState _state = StudentDataState.Busy;
   StudentData studentData = StudentData();
   FirestoreDBService _firestoreDBService = locator<FirestoreDBService>();
+  AllWorkoutLogsModel _allWorkoutLogsModel = locator<AllWorkoutLogsModel>();
+  MeasurementLogsModel _measurementLogsModel = locator<MeasurementLogsModel>();
+
+  Workout nextWorkout = Workout();
   TrainerDataModel _trainerDataModel = TrainerDataModel();
   StudentDataModel();
+
   reset() {
     _trainerDataModel = TrainerDataModel();
     studentData = StudentData();
@@ -28,6 +35,47 @@ class StudentDataModel with ChangeNotifier {
     studentData = await _firestoreDBService.checkStudentData(studentData);
 
     state = StudentDataState.Idle;
+  }
+
+  void handleRestDay() {
+    print("girdim");
+    var index = studentData.getWorkoutPlan.workouts.indexOf(nextWorkout);
+    print(index);
+    nextWorkout = studentData.getWorkoutPlan
+        .workouts[(index + 1) % studentData.getWorkoutPlan.workouts.length];
+    print(studentData.getWorkoutPlan.workouts.indexOf(nextWorkout));
+    notifyListeners();
+  }
+
+  void findNextWorkout() async {
+    if (_allWorkoutLogsModel.allWorkoutLogs.workoutLogs.length > 0) {
+      if (_allWorkoutLogsModel.allWorkoutLogs.workoutLogs.length > 0) {
+        Workout x = studentData.getWorkoutPlan.workouts.firstWhere((element) {
+          return element.name ==
+              _allWorkoutLogsModel.allWorkoutLogs.workoutLogs.last.workoutName;
+        });
+
+        if (x != null) {
+          var index = studentData.getWorkoutPlan.workouts.indexOf(x);
+          nextWorkout = studentData.getWorkoutPlan.workouts[
+              (index + 1) % studentData.getWorkoutPlan.workouts.length];
+        } else {
+          nextWorkout = studentData.getWorkoutPlan.workouts.first;
+        }
+      } else {
+        nextWorkout = studentData.getWorkoutPlan.workouts.first;
+      }
+    } else {
+      nextWorkout = studentData.getWorkoutPlan.workouts.first;
+    }
+  }
+
+  Future<void> getStudentData() async {
+    print("Student Data is Refreshed");
+    studentData =
+        await _firestoreDBService.getStudentData(studentData.getUser.userID);
+
+    notifyListeners();
   }
 
   Future<void> updateOtherInformation(
@@ -82,6 +130,8 @@ class StudentDataModel with ChangeNotifier {
       }
       await _firestoreDBService.saveStudentData(studentData);
     }
+    await _measurementLogsModel.saveMeasurementLogs(measurement);
+
     state = StudentDataState.Idle;
   }
 

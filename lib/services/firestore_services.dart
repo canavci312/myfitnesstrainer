@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:myfitnesstrainer/models/all_workout_logs.dart';
+import 'package:myfitnesstrainer/models/measurement.dart';
+import 'package:myfitnesstrainer/models/measurement_logs.dart';
 import 'package:myfitnesstrainer/models/message.dart';
 import 'package:myfitnesstrainer/models/student_data.dart';
 import 'package:myfitnesstrainer/models/trainer_data.dart';
 import 'package:myfitnesstrainer/models/user.dart';
+import 'package:myfitnesstrainer/models/workout_logslist.dart';
 import 'package:myfitnesstrainer/models/workout_planslist.dart';
 
 class FirestoreDBService {
@@ -183,5 +185,24 @@ class FirestoreDBService {
     return snapShot.map((mesajListesi) => mesajListesi.documents
         .map((mesaj) => Message.fromMap(mesaj.data))
         .toList());
+  }
+
+  saveMeasurementLogs(MeasurementLogs measurement, String userID) async {
+    print("firestore a girdi modele girdi");
+    await _firebaseDB
+        .collection("measurement_logs")
+        .document(userID)
+        .setData(measurement.toMap());
+  }
+
+  Future<MeasurementLogs> getMeasurementLogs(User user) async {
+    String userID = user.userID;
+
+    DocumentSnapshot _okunanWorkoutLogsData =
+        await Firestore.instance.document("measurement_logs/$userID").get();
+    if (_okunanWorkoutLogsData.data == null) {
+      return MeasurementLogs();
+    } else
+      return MeasurementLogs.fromMap(_okunanWorkoutLogsData.data);
   }
 }

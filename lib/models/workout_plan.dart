@@ -1,4 +1,3 @@
-import 'package:myfitnesstrainer/models/user.dart';
 import 'package:myfitnesstrainer/models/workout.dart';
 
 class WorkoutPlan {

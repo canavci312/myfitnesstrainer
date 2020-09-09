@@ -4,6 +4,7 @@ import 'package:myfitnesstrainer/screens/login_screen.dart';
 import 'package:myfitnesstrainer/screens/student/student_home.dart';
 import 'package:myfitnesstrainer/screens/trainer/trainer_home.dart';
 import 'package:myfitnesstrainer/viewmodel/all_workout_logs_viewmodel.dart';
+import 'package:myfitnesstrainer/viewmodel/measurement_logs_viewmodel.dart';
 import 'package:myfitnesstrainer/viewmodel/student_data.viewmodel.dart';
 import 'package:myfitnesstrainer/viewmodel/trainer_data_viewmodel.dart';
 import 'package:myfitnesstrainer/viewmodel/userviewmodel.dart';
@@ -33,7 +34,11 @@ class RootPage extends StatelessWidget {
           } else {
             final _allWorkoutLogs =
                 Provider.of<AllWorkoutLogsModel>(context, listen: true);
-            if (_allWorkoutLogs.state == LogsState.Loading) {
+            final _allMeasurementLogs =
+                Provider.of<MeasurementLogsModel>(context, listen: true);
+            if (_allWorkoutLogs.state == LogsState.Loading &&
+                _allMeasurementLogs.state == MeasurementLogsState.Loading) {
+              _allMeasurementLogs.loadMeasurementLogs();
               _allWorkoutLogs.loadWorkoutLogs();
               return LoadingScreen();
             } else

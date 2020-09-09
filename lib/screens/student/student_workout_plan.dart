@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:myfitnesstrainer/models/workout.dart';
 import 'package:myfitnesstrainer/screens/student/student_workout_details.dart';
+import 'package:myfitnesstrainer/viewmodel/all_workout_logs_viewmodel.dart';
 import 'package:myfitnesstrainer/viewmodel/student_data.viewmodel.dart';
 import 'package:provider/provider.dart';
 
@@ -8,7 +11,6 @@ class StudentWorkoutPlanPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Consumer<StudentDataModel>(
         builder: (context, studentDataModel, child) {
       if (studentDataModel.studentData.getCoach.userID == null) {
@@ -34,6 +36,7 @@ class StudentWorkoutPlanPage extends StatelessWidget {
           ],
         ));
       } else {
+        studentDataModel.findNextWorkout();
         return SingleChildScrollView(
           child: Column(
             children: [
@@ -44,6 +47,7 @@ class StudentWorkoutPlanPage extends StatelessWidget {
                 itemCount:
                     studentDataModel.studentData.getWorkoutPlan.workouts.length,
                 itemBuilder: (BuildContext context, index) {
+                  //==
                   return !studentDataModel
                           .studentData.getWorkoutPlan.workouts[index].rest
                       ? GestureDetector(
@@ -55,34 +59,89 @@ class StudentWorkoutPlanPage extends StatelessWidget {
                                         studentDataModel.studentData
                                             .getWorkoutPlan.workouts[index])));
                           },
-                          child: Card(
-                            margin: EdgeInsets.all(10.0),
-                            child: ListTile(
-                                leading: Icon(Icons.fitness_center),
-                                title: (Text(studentDataModel.studentData
-                                    .getWorkoutPlan.workouts[index].name)),
-                                subtitle: (Text((studentDataModel.studentData
-                                                .getWorkoutPlan.workouts[index]
-                                                .calculateWorkoutTime() /
-                                            60)
-                                        .round()
-                                        .toString() +
-                                    " dakika, " +
-                                    studentDataModel
-                                        .studentData
-                                        .getWorkoutPlan
+                          child: ListTile(
+                            leading: studentDataModel.nextWorkout ==
+                                    studentDataModel.studentData.getWorkoutPlan
                                         .workouts[index]
-                                        .exerciseTargetsList
-                                        .length
-                                        .toString() +
-                                    " hareket"))),
+                                ? Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      Text("Sıradaki"),
+                                      Icon(FontAwesomeIcons.arrowRight),
+                                    ],
+                                  )
+                                : null,
+                            title: Card(
+                              margin: EdgeInsets.all(10.0),
+                              child: ListTile(
+                                  leading: Icon(Icons.fitness_center),
+                                  title: (Text(studentDataModel.studentData
+                                      .getWorkoutPlan.workouts[index].name)),
+                                  subtitle: (Text((studentDataModel
+                                                  .studentData
+                                                  .getWorkoutPlan
+                                                  .workouts[index]
+                                                  .calculateWorkoutTime() /
+                                              60)
+                                          .round()
+                                          .toString() +
+                                      " dakika, " +
+                                      studentDataModel
+                                          .studentData
+                                          .getWorkoutPlan
+                                          .workouts[index]
+                                          .exerciseTargetsList
+                                          .length
+                                          .toString() +
+                                      " hareket"))),
+                            ),
                           ),
                         )
-                      : Card(
-                          margin: EdgeInsets.all(10.0),
-                          child: ListTile(
-                              leading: Icon(Icons.airline_seat_flat),
-                              title: Text("Dinlenme günü")));
+                      : ListTile(
+                          leading: studentDataModel.nextWorkout ==
+                                  studentDataModel.studentData.getWorkoutPlan
+                                      .workouts[index]
+                              ? Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Text("Sıradaki"),
+                                    Icon(FontAwesomeIcons.arrowRight),
+                                  ],
+                                )
+                              : null,
+                          title: Card(
+                            margin: EdgeInsets.all(10.0),
+                            child: ListTile(
+                                leading: Icon(Icons.airline_seat_flat),
+                                title: Text("Dinlenme günü"),
+                                subtitle: studentDataModel.nextWorkout ==
+                                        studentDataModel.studentData
+                                            .getWorkoutPlan.workouts[index]
+                                    ? Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          Flexible(
+                                            flex: 2,
+                                            child: RaisedButton(
+                                                onPressed: () {
+                                                  studentDataModel
+                                                      .handleRestDay();
+                                                },
+                                                child: Text("Dinlendim")),
+                                          ),
+                                        ],
+                                      )
+                                    : null),
+                          ));
                 },
               ),
             ],

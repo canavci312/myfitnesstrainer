@@ -30,7 +30,7 @@ class _WorkoutHelperState extends State<WorkoutHelper>
   List<TextEditingController> _weightControllers = [];
   PageController pageController;
   bool first = true;
-  WorkoutLogsList workoutLogsList;
+  AllWorkoutLogs workoutLogsList;
   Future<bool> _onBackPressed() {
     return showDialog(
           context: context,
@@ -90,10 +90,10 @@ class _WorkoutHelperState extends State<WorkoutHelper>
 
   @override
   void dispose() {
-    pageController.dispose();
-    controller?.stop(canceled: true);
-
     controller.dispose();
+
+    pageController.dispose();
+
     super.dispose();
   }
 
@@ -404,10 +404,6 @@ class _WorkoutHelperState extends State<WorkoutHelper>
                                                 0.45,
                                             child: RaisedButton(
                                               onPressed: () {
-                                                controller?.stop(
-                                                    canceled: true);
-
-                                                controller.dispose();
                                                 WorkoutLogs _workoutLogs =
                                                     WorkoutLogs();
                                                 _workoutLogs.exerciseLogs =
@@ -535,6 +531,7 @@ class _WorkoutHelperState extends State<WorkoutHelper>
                                                           .setLogs
                                                           .length) {
                                                     setState(() {
+                                                      controller.dispose();
                                                       _exerciseLogs[
                                                               currentIndex]
                                                           .setLogs
@@ -650,12 +647,17 @@ class _WorkoutHelperState extends State<WorkoutHelper>
                                                     0.45,
                                                 child: RaisedButton(
                                                   color: Colors.blue,
-                                                  onPressed: () {
-                                                    showDialog(
+                                                  onPressed: () async {
+                                                    int value =
+                                                        await showDialog(
                                                       context: context,
                                                       builder: (context) =>
                                                           TimerScreen(),
                                                     );
+                                                    _repControllers[
+                                                                currentIndex]
+                                                            .text =
+                                                        value.toString();
                                                   },
                                                   child: Text(
                                                     "ZAMANLAYICI BAŞLAT",
@@ -700,6 +702,7 @@ class _WorkoutHelperState extends State<WorkoutHelper>
                                                               .setLogs
                                                               .length) {
                                                         setState(() {
+                                                          controller.dispose();
                                                           _exerciseLogs[currentIndex].setLogs.add(SetLogs(
                                                               weight: int.tryParse(
                                                                       _weightControllers[
@@ -710,6 +713,7 @@ class _WorkoutHelperState extends State<WorkoutHelper>
                                                                   _repControllers[
                                                                           currentIndex]
                                                                       .text)));
+
                                                           controller = AnimationController(
                                                               vsync: this,
                                                               duration: Duration(

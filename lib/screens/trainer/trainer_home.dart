@@ -6,7 +6,10 @@ import 'package:myfitnesstrainer/screens/trainer/nutrition_plans_page.dart';
 import 'package:myfitnesstrainer/screens/trainer/overview_page.dart';
 import 'package:myfitnesstrainer/screens/trainer/trainer_drawer.dart';
 import 'package:myfitnesstrainer/screens/trainer/workout_plans_page.dart';
+import 'package:myfitnesstrainer/viewmodel/trainer_data_viewmodel.dart';
 import 'package:outline_material_icons/outline_material_icons.dart';
+import 'package:provider/provider.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class TrainerHomePage extends StatefulWidget {
   createState() {
@@ -16,6 +19,9 @@ class TrainerHomePage extends StatefulWidget {
 
 @override
 class TrainerHomePageState extends State<TrainerHomePage> {
+  RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
+
   int _currentIndex = 0;
   OverviewPage _overviewPage;
   NutritionPlansPage _nutritionPlansPage;
@@ -49,6 +55,22 @@ class TrainerHomePageState extends State<TrainerHomePage> {
   }
 
   Widget build(BuildContext context) {
+    final _trainerModel = Provider.of<TrainerDataModel>(context, listen: true);
+    void _onLoading() async {
+      // monitor network fetch
+      // if failed,use loadFailed(),if no data return,use LoadNodata()
+      print("burdayımm");
+      _refreshController.loadComplete();
+    }
+
+    void _onRefresh() async {
+      // monitor network fetch
+      await _trainerModel.getTrainerData();
+      // if failed,use refreshFailed()
+
+      _refreshController.refreshCompleted();
+    }
+
     return Scaffold(
       drawer: TrainerDrawer(),
       floatingActionButton: _currentIndex == 1
@@ -78,7 +100,13 @@ class TrainerHomePageState extends State<TrainerHomePage> {
             style: TextStyle(fontFamily: "Signatra", fontSize: 35)),
       ),
 
-      body: currentPage, //currentPage,
+      body: SmartRefresher(
+          enablePullDown: true,
+          enablePullUp: false,
+          controller: _refreshController,
+          onRefresh: _onRefresh,
+          onLoading: _onLoading,
+          child: currentPage), //currentPage,
       bottomNavigationBar: BottomNavigationBar(
         selectedItemColor: Colors.black,
         onTap: (int index) {

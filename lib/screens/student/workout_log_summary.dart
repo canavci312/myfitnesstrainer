@@ -7,10 +7,9 @@ import 'package:myfitnesstrainer/viewmodel/all_workout_logs_viewmodel.dart';
 import 'package:myfitnesstrainer/viewmodel/student_data.viewmodel.dart';
 import 'package:provider/provider.dart';
 
-class WorkoutSummary extends StatelessWidget {
-  Workout _workout;
+class WorkoutLogSummary extends StatelessWidget {
   WorkoutLogs workoutLogs;
-  WorkoutSummary(this.workoutLogs, this._workout);
+  WorkoutLogSummary(this.workoutLogs);
 
   @override
   Widget build(BuildContext context) {
@@ -21,56 +20,6 @@ class WorkoutSummary extends StatelessWidget {
       return Scaffold(
         appBar: AppBar(
           title: Text("Antrenman Özetiniz"),
-          actions: [
-            MaterialButton(
-                color: Colors.blue,
-                onPressed: () {
-                  workoutLogs.workoutName = _workout.name;
-                  _allWorkoutLogs.allWorkoutLogs.workoutLogs.add(workoutLogs);
-
-                  _allWorkoutLogs.state = LogsState.Loading;
-                  _allWorkoutLogs.saveWorkoutLogs();
-
-                  Navigator.of(context).popUntil((route) => route.isFirst);
-
-                  /*           print(_allWorkoutLogs.allWorkoutLogs.workoutLogsList);
-                  if (_allWorkoutLogs.allWorkoutLogs.workoutLogsList.length ==
-                      0) {
-                    WorkoutLogsList _workoutLogsList = WorkoutLogsList();
-                    _workoutLogsList.workoutName = _workout.name;
-                    _workoutLogsList.workoutLogs.add(workoutLogs);
-                    _allWorkoutLogs.allWorkoutLogs.workoutLogsList
-                        .add(_workoutLogsList);
-                    print("geldim 1");
-                  } else {
-                    _allWorkoutLogs.allWorkoutLogs.workoutLogsList
-                        .forEach((element) {
-                      if (element.workoutName == _workout.name) {
-                        element.workoutLogs.add(workoutLogs);
-                        print("geldim 2");
-                      } else {
-                        print(_allWorkoutLogs.allWorkoutLogs.workoutLogsList);
-                        WorkoutLogsList _workoutLogsList = WorkoutLogsList();
-                        _workoutLogsList.workoutName = _workout.name;
-                        _workoutLogsList.workoutLogs.add(workoutLogs);
-                        _allWorkoutLogs.allWorkoutLogs.workoutLogsList
-                            .add(_workoutLogsList);
-
-                        print("geldim");
-                      }
-                    });
-                  }
-
-                  _allWorkoutLogs.state = LogsState.Loading;
-
-                  _allWorkoutLogs.saveWorkoutLogs();
-                  Navigator.of(context).popUntil((route) => route.isFirst);*/
-                },
-                child: Text(
-                  "KAYDET",
-                  style: TextStyle(color: Colors.white),
-                ))
-          ],
         ),
         body: SingleChildScrollView(
           child: Padding(
@@ -95,8 +44,9 @@ class WorkoutSummary extends StatelessWidget {
                               itemCount: workoutLogs
                                   .exerciseLogs[index1].setLogs.length,
                               itemBuilder: (BuildContext context, int index2) {
-                                return _workout
-                                        .exerciseTargetsList[index1].repBased
+                                return workoutLogs.exerciseLogs[index1]
+                                            .setLogs[index2].duration ==
+                                        null
                                     ? Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: Text("Set " +

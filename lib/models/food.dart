@@ -13,8 +13,7 @@ class Food {
 
   Food.fromMap(Map<String, dynamic> map) {
     this.name = map['name'];
-    this.quantity = map['quantity'];
+    this.quantity = (map['quantity'].toDouble());
     this.unit = map['unit'];
   }
-
 }
