@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:myfitnesstrainer/screens/student/workout_log_summary.dart';
-import 'package:myfitnesstrainer/screens/student/workout_summary.dart';
 import 'package:myfitnesstrainer/viewmodel/all_workout_logs_viewmodel.dart';
 import 'package:provider/provider.dart';
 
@@ -9,7 +8,7 @@ class WorkoutHistoryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String _showDate(DateTime date) {
-      var _formatter = DateFormat.yMMMMEEEEd();
+      var _formatter = DateFormat.yMMMMEEEEd('tr');
       var _formattedTime = _formatter.format(date);
       return _formattedTime;
     }
@@ -32,12 +31,17 @@ class WorkoutHistoryPage extends StatelessWidget {
 
     final _allWorkoutLogs =
         Provider.of<AllWorkoutLogsModel>(context, listen: true);
+    _allWorkoutLogs.allWorkoutLogs.workoutLogs.sort((a, b) {
+      return a.date.compareTo(b.date);
+    });
+    // _allWorkoutLogs.allWorkoutLogs.workoutLogs.reversed;
     return Scaffold(
       appBar: AppBar(
         title: Text("Antrenman Geçmişi"),
       ),
       body: SingleChildScrollView(
         child: ListView.builder(
+          reverse: true,
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
           itemCount: _allWorkoutLogs.allWorkoutLogs.workoutLogs.length,
@@ -48,6 +52,23 @@ class WorkoutHistoryPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
+                index != _allWorkoutLogs.allWorkoutLogs.workoutLogs.length - 1
+                    ? isDifferentMonth(
+                            _allWorkoutLogs
+                                .allWorkoutLogs.workoutLogs[index].date,
+                            _allWorkoutLogs
+                                .allWorkoutLogs.workoutLogs[index + 1].date)
+                        ? Padding(
+                            padding: const EdgeInsets.fromLTRB(24.0, 14, 14, 6),
+                            child: Text(
+                                _monthDiff(_allWorkoutLogs
+                                    .allWorkoutLogs.workoutLogs[index].date),
+                                style: TextStyle(
+                                    color: Colors.blue,
+                                    fontWeight: FontWeight.w600)),
+                          )
+                        : SizedBox()
+                    : SizedBox(),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(8.0, 8, 8, 0),
                   child: GestureDetector(
@@ -69,23 +90,6 @@ class WorkoutHistoryPage extends StatelessWidget {
                     )),
                   ),
                 ),
-                index != _allWorkoutLogs.allWorkoutLogs.workoutLogs.length - 1
-                    ? isDifferentMonth(
-                            _allWorkoutLogs
-                                .allWorkoutLogs.workoutLogs[index].date,
-                            _allWorkoutLogs
-                                .allWorkoutLogs.workoutLogs[index + 1].date)
-                        ? Padding(
-                            padding: const EdgeInsets.fromLTRB(24.0, 14, 14, 6),
-                            child: Text(
-                                _monthDiff(_allWorkoutLogs.allWorkoutLogs
-                                    .workoutLogs[index + 1].date),
-                                style: TextStyle(
-                                    color: Colors.blue,
-                                    fontWeight: FontWeight.w600)),
-                          )
-                        : SizedBox()
-                    : SizedBox(),
               ],
             );
           },

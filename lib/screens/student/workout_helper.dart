@@ -1,25 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:myfitnesstrainer/models/exercise_logs.dart';
-import 'package:myfitnesstrainer/models/exercise_targets.dart';
 import 'package:myfitnesstrainer/models/set_logs.dart';
 import 'package:myfitnesstrainer/models/workout.dart';
 import 'package:myfitnesstrainer/models/workout_logs.dart';
-import 'package:myfitnesstrainer/models/workout_logslist.dart';
+import 'package:myfitnesstrainer/screens/loading_screen.dart';
 import 'package:myfitnesstrainer/screens/student/timerscreen.dart';
 import 'package:myfitnesstrainer/screens/student/workout_summary.dart';
-import 'package:myfitnesstrainer/viewmodel/all_workout_logs_viewmodel.dart';
-import 'package:myfitnesstrainer/viewmodel/exercise_logs_viewmodel.dart';
+import 'package:myfitnesstrainer/viewmodel/workout_helper_old_logs.dart';
 import 'package:vibration/vibration.dart';
 import 'dart:math' as math;
 import 'package:timeago/timeago.dart' as timeago;
-
 import 'package:provider/provider.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class WorkoutHelper extends StatefulWidget {
-  Workout workout;
+  final Workout workout;
   WorkoutHelper(this.workout);
-
   _WorkoutHelperState createState() => _WorkoutHelperState();
 }
 
@@ -29,8 +26,8 @@ class _WorkoutHelperState extends State<WorkoutHelper>
   final _formKey = GlobalKey<FormState>();
   List<TextEditingController> _weightControllers = [];
   PageController pageController;
+  PageController verticalController;
   bool first = true;
-  AllWorkoutLogs workoutLogsList;
   Future<bool> _onBackPressed() {
     return showDialog(
           context: context,
@@ -62,7 +59,7 @@ class _WorkoutHelperState extends State<WorkoutHelper>
   AnimationController controller;
   int currentIndex = 0;
   List<ExerciseLogs> _exerciseLogs = [];
-  List<ExerciseLogs> _historyList = [];
+
   void initState() {
     super.initState();
     controller =
@@ -86,6 +83,7 @@ class _WorkoutHelperState extends State<WorkoutHelper>
         }
       });
     });
+    verticalController = PageController(initialPage: 1);
   }
 
   @override
@@ -99,30 +97,6 @@ class _WorkoutHelperState extends State<WorkoutHelper>
 
   @override
   Widget build(BuildContext context) {
-    /*       final _allWorkoutLogs =
-        Provider.of<AllWorkoutLogsModel>(context, listen: true);
-     try{ workoutLogsList=_allWorkoutLogs.allWorkoutLogs.workoutLogsList.lastWhere((element) => element.workoutName==widget.workout.name);}catch(e){print(e);}
-     if(workoutLogsList!=null){
-      var lastWorkout= workoutLogsList.workoutLogs.last;
-      lastWorkout.exerciseLogs.forEach((element) {
-        widget.workout.exerciseTargetsList.forEach((element2){
-             if(element.exerciseName==element2.exercise.name){
-
-             }
-        });
-     
-      
-     });}
-    final now = new DateTime.now();
-    final difference = now.difference(_allWorkoutLogs
-        .allWorkoutLogs.workoutLogsList
-        .firstWhere((element) => element.workoutName == widget.workout.name)
-        .workoutLogs
-        .last
-        .date);
-    final daysAgo =
-        timeago.format(DateTime.now().subtract(difference), locale: 'tr');*/
-
     if (first) {
       for (var i = 0; i < widget.workout.exerciseTargetsList.length; i++) {
         _repControllers.add(TextEditingController(
@@ -181,108 +155,14 @@ class _WorkoutHelperState extends State<WorkoutHelper>
                           title: Text(widget.workout
                               .exerciseTargetsList[position].exercise.name),
                         ),
-                        body: SingleChildScrollView(
-                          child: Column(
-                            children: [
-                              Card(
-                                margin: EdgeInsets.all(10.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(10.0),
-                                      child: Text("Bugün",
-                                          style: TextStyle(
-                                              color: Colors.blue,
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w400)),
-                                    ),
-                                    ListView.builder(
-                                      physics: NeverScrollableScrollPhysics(),
-                                      shrinkWrap: true,
-                                      itemCount: widget
-                                          .workout
-                                          .exerciseTargetsList[position]
-                                          .setCount,
-                                      itemBuilder:
-                                          (BuildContext context, int index) {
-                                        return widget.workout.exerciseTargetsList[position].repBased
-                                            ? ListTile(
-                                                title: _exerciseLogs[position].setLogs.length > index &&
-                                                        _exerciseLogs[position]
-                                                                .setLogs[index]
-                                                                .weight !=
-                                                            0
-                                                    ? Text("Set " +
-                                                        (index + 1).toString() +
-                                                        " " +
-                                                        _exerciseLogs[position]
-                                                            .setLogs[index]
-                                                            .weight
-                                                            .toString() +
-                                                        " kilo " +
-                                                        _repControllers[index]
-                                                            .text +
-                                                        " tekrar")
-                                                    : _exerciseLogs[position].setLogs.length > index && _exerciseLogs[position].setLogs[index].weight == 0
-                                                        ? Text("Set " +
-                                                            (index + 1)
-                                                                .toString() +
-                                                            " " +
-                                                            _exerciseLogs[position]
-                                                                .setLogs[index]
-                                                                .reps
-                                                                .toString() +
-                                                            " tekrar")
-                                                        : Text(
-                                                            "Set " +
-                                                                (index + 1).toString() +
-                                                                ", " +
-                                                                widget.workout.exerciseTargetsList[position].minRep.toString() +
-                                                                "-" +
-                                                                widget.workout.exerciseTargetsList[position].maxRep.toString() +
-                                                                " tekrar",
-                                                            style: _exerciseLogs[position].setLogs.length == index ? TextStyle(color: Colors.blue) : TextStyle(color: Colors.black)))
-                                            : ListTile(title: _exerciseLogs[position].setLogs.length > index && _exerciseLogs[position].setLogs[index].weight != 0 ? Text("Set " + (index + 1).toString() + " " + _exerciseLogs[position].setLogs[index].weight.toString() + " kilo " + _repControllers[index].text + " saniye") : _exerciseLogs[position].setLogs.length > index && _exerciseLogs[position].setLogs[index].weight == 0 ? Text("Set " + (index + 1).toString() + " " + _exerciseLogs[position].setLogs[index].duration.toString() + " saniye") : Text("Set " + (index + 1).toString() + ", " + widget.workout.exerciseTargetsList[position].duration.toString() + " saniye", style: _exerciseLogs[position].setLogs.length == index ? TextStyle(color: Colors.blue) : TextStyle(color: Colors.black)));
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              /*            if(workoutLogsList.workoutLogs.length!=0)
-                              
-                              Card(
-                                margin: EdgeInsets.all(10.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(10.0),
-                                      child: Text(daysAgo,
-                                          style: TextStyle(
-                                              color: Colors.blue,
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w400)),
-                                    ),
-                                 
-                                    ListView.builder(
-                                        physics: NeverScrollableScrollPhysics(),
-                                        shrinkWrap: true,
-                                        itemCount:_historyList[position].setLogs.length
-                                        itemBuilder:
-                                            (BuildContext context, int index) {
-                                          return 
-                                          _historyList[position].setLogs[index].duration==0?
-                                          ListTile(
-                                            title: _historyList[position].exerciseName,
-
-                                          ):ListTile();
-                                        }),
-                                  ],
-                                ),
-                              ),*/
-                            ],
-                          ),
+                        body: PageView(
+                          controller: verticalController,
+                          scrollDirection: Axis.vertical,
+                          children: [
+                            buildExerciseVideoPage(position),
+                            buildWorkoutInputPage(position),
+                            buildLastWorkoutPage(position)
+                          ],
                         ));
                   },
                   itemCount: widget.workout.exerciseTargetsList.length),
@@ -751,6 +631,198 @@ class _WorkoutHelperState extends State<WorkoutHelper>
           ],
         ),
       ),
+    );
+  }
+
+  String calculateDaysAgo(DateTime time) {
+    timeago.setLocaleMessages('tr', timeago.TrMessages());
+    final now = new DateTime.now();
+    final difference = now.difference(time);
+    return timeago.format(DateTime.now().subtract(difference), locale: 'tr');
+  }
+
+  SingleChildScrollView buildWorkoutInputPage(int position) {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Card(
+            margin: EdgeInsets.all(10.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Text("Bugün",
+                      style: TextStyle(
+                          color: Colors.blue,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w400)),
+                ),
+                ListView.builder(
+                  physics: NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount:
+                      widget.workout.exerciseTargetsList[position].setCount,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Column(
+                      children: [
+                        widget.workout.exerciseTargetsList[position].repBased
+                            ? ListTile(
+                                title: _exerciseLogs[position].setLogs.length > index &&
+                                        _exerciseLogs[position].setLogs[index].weight !=
+                                            0
+                                    ? Text("Set " +
+                                        (index + 1).toString() +
+                                        ", " +
+                                        _exerciseLogs[position]
+                                            .setLogs[index]
+                                            .weight
+                                            .toString() +
+                                        " kilo " +
+                                        _repControllers[index].text +
+                                        " tekrar")
+                                    : _exerciseLogs[position].setLogs.length >
+                                                index &&
+                                            _exerciseLogs[position]
+                                                    .setLogs[index]
+                                                    .weight ==
+                                                0
+                                        ? Text("Set " +
+                                            (index + 1).toString() +
+                                            ", " +
+                                            _exerciseLogs[position]
+                                                .setLogs[index]
+                                                .reps
+                                                .toString() +
+                                            " tekrar")
+                                        : Text(
+                                            "Set " +
+                                                (index + 1).toString() +
+                                                ", " +
+                                                widget.workout.exerciseTargetsList[position].minRep
+                                                    .toString() +
+                                                "-" +
+                                                widget.workout.exerciseTargetsList[position].maxRep
+                                                    .toString() +
+                                                " tekrar",
+                                            style: _exerciseLogs[position].setLogs.length == index
+                                                ? TextStyle(color: Colors.blue)
+                                                : TextStyle(color: Colors.black)))
+                            : ListTile(
+                                title: _exerciseLogs[position].setLogs.length > index && _exerciseLogs[position].setLogs[index].weight != 0
+                                    ? Text("Set " + (index + 1).toString() + ", " + _exerciseLogs[position].setLogs[index].weight.toString() + " kilo " + _repControllers[index].text + " saniye")
+                                    : _exerciseLogs[position].setLogs.length > index && _exerciseLogs[position].setLogs[index].weight == 0
+                                        ? Text("Set " + (index + 1).toString() + ", " + _exerciseLogs[position].setLogs[index].duration.toString() + " saniye")
+                                        : Text("Set " + (index + 1).toString() + ", " + widget.workout.exerciseTargetsList[position].duration.toString() + " saniye", style: _exerciseLogs[position].setLogs.length == index ? TextStyle(color: Colors.blue) : TextStyle(color: Colors.black))),
+                      ],
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildExerciseVideoPage(int position) {
+    String videoId;
+    videoId = YoutubePlayer.convertUrlToId(
+        "https://www.youtube.com/watch?v=USxvy07gjPA&ab_channel=A%C4%9EIRSA%C4%9ELAM");
+    YoutubePlayerController _controller = YoutubePlayerController(
+      initialVideoId: videoId,
+      flags: YoutubePlayerFlags(
+        autoPlay: true,
+        mute: false,
+      ),
+    );
+
+    return YoutubePlayer(
+      controller: _controller,
+      showVideoProgressIndicator: true,
+    );
+  }
+
+  Widget buildLastWorkoutPage(int position) {
+    return ChangeNotifierProvider<WorkoutHelperOldLogsViewModel>(
+      create: (context) => WorkoutHelperOldLogsViewModel(
+          widget.workout.exerciseTargetsList[position].exercise),
+      child: Consumer<WorkoutHelperOldLogsViewModel>(
+          builder: (context, oldLogsVM, child) {
+        return oldLogsVM.state == DataReady.Ready
+            ? Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SingleChildScrollView(
+                    child: oldLogsVM.dates.length > 0
+                        ? Card(
+                            child: ListTile(
+                              title: Text(
+                                  calculateDaysAgo(oldLogsVM.dates.last),
+                                  style: TextStyle(
+                                      color: Colors.blue,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w400)),
+                              subtitle: ListView.builder(
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                itemCount: oldLogsVM
+                                    .exerciseLogsList.last.setLogs.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return ListTile(
+                                      title: oldLogsVM.exerciseLogsList.last
+                                                  .setLogs[index].duration ==
+                                              null
+                                          ? oldLogsVM.exerciseLogsList.last.setLogs[index].weight !=
+                                                  0
+                                              ? Text("Set " +
+                                                  (index + 1).toString() +
+                                                  ", " +
+                                                  oldLogsVM
+                                                      .exerciseLogsList
+                                                      .last
+                                                      .setLogs[index]
+                                                      .weight
+                                                      .toString() +
+                                                  " kg " +
+                                                  oldLogsVM.exerciseLogsList
+                                                      .last.setLogs[index].reps
+                                                      .toString() +
+                                                  " tekrar")
+                                              : Text("Set " +
+                                                  (index + 1).toString() +
+                                                  ", " +
+                                                  oldLogsVM.exerciseLogsList
+                                                      .last.setLogs[index].reps
+                                                      .toString() +
+                                                  " tekrar")
+                                          : oldLogsVM.exerciseLogsList.last.setLogs[index].weight !=
+                                                  0
+                                              ? Text("Set " +
+                                                  (index + 1).toString() +
+                                                  ", " +
+                                                  oldLogsVM.exerciseLogsList.last.setLogs[index].weight.toString() +
+                                                  " kg " +
+                                                  oldLogsVM.exerciseLogsList.last.setLogs[index].duration.toString() +
+                                                  " saniye")
+                                              : Text("Set " + (index + 1).toString() + ", " + oldLogsVM.exerciseLogsList.last.setLogs[index].duration.toString() + " saniye"));
+                                },
+                              ),
+                            ),
+                          )
+                        : Card(
+                            child: ListTile(
+                            title: Text("Egzersiz Geçmişi",
+                                style: TextStyle(
+                                    color: Colors.blue,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w400)),
+                            subtitle:
+                                Text("Egzersiz geçmişiniz bulunmamaktadır."),
+                          ))),
+              )
+            : LoadingScreen();
+      }),
     );
   }
 }

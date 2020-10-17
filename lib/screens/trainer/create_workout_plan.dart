@@ -113,7 +113,6 @@ class CreateWorkoutPlanPage extends StatelessWidget {
   }
 
   Widget build(BuildContext context) {
-    print(workoutPlan.description);
     TrainerDataModel trainerDataModel = locator<TrainerDataModel>();
     return ChangeNotifierProvider(
         create: (context) => CreateWorkoutPlanModel(workoutPlan: workoutPlan),
@@ -276,7 +275,9 @@ class CreateWorkoutPlanPage extends StatelessWidget {
                             );
                           },
                           child: Card(
-                            child: workoutPlan.description == null
+                            child: createWorkoutPlanModel
+                                        .workoutPlan.description ==
+                                    null
                                 ? ListTile(
                                     leading: Icon(Icons.add),
                                     title: Text("Antrenman Açıklaması Ekle"))

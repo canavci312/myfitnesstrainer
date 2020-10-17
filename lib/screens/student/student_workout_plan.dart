@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:myfitnesstrainer/models/workout.dart';
+import 'package:myfitnesstrainer/locator.dart';
 import 'package:myfitnesstrainer/screens/student/student_workout_details.dart';
 import 'package:myfitnesstrainer/viewmodel/all_workout_logs_viewmodel.dart';
 import 'package:myfitnesstrainer/viewmodel/student_data.viewmodel.dart';
@@ -11,35 +11,67 @@ class StudentWorkoutPlanPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AllWorkoutLogsModel _allWorkoutLogsModel = locator<AllWorkoutLogsModel>();
+
     return Consumer<StudentDataModel>(
         builder: (context, studentDataModel, child) {
       if (studentDataModel.studentData.getCoach.userID == null) {
-        return Center(
-            child: RaisedButton(
-          onPressed: () {
-            studentDataModel.assignCoach();
-          },
-          child: Text("Koç edin"),
-        ));
+        return Column(
+          children: [
+            _allWorkoutLogsModel.allWorkoutLogs.workoutLogs != null
+                ? Text("Toplam " +
+                    _allWorkoutLogsModel.allWorkoutLogs.workoutLogs.length
+                        .toString() +
+                    " antrenman yaptınız.")
+                : Text(""),
+            Center(
+                child: RaisedButton(
+              onPressed: () {
+                studentDataModel.assignCoach();
+              },
+              child: Text("Koç edin"),
+            )),
+          ],
+        );
       } else if (studentDataModel.studentData.getCoach.userID != null &&
           studentDataModel.studentData.getWorkoutPlan.name == null) {
-        return Center(
-            child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
+        return Column(
           children: [
-            Text("Hoşgeldiniz!"),
-            Text(
-              "Antenörünüz en kısa süre içinde programınızı hazırlayacaktır...",
-              textAlign: TextAlign.center,
-            )
+            _allWorkoutLogsModel.allWorkoutLogs.workoutLogs != null
+                ? Text("Toplam " +
+                    _allWorkoutLogsModel.allWorkoutLogs.workoutLogs.length
+                        .toString() +
+                    " antrenman yaptınız.")
+                : Text(""),
+            Center(
+                child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text("Hoşgeldiniz!"),
+                Text(
+                  "Antenörünüz en kısa süre içinde programınızı hazırlayacaktır...",
+                  textAlign: TextAlign.center,
+                )
+              ],
+            )),
           ],
-        ));
+        );
       } else {
         studentDataModel.findNextWorkout();
         return SingleChildScrollView(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              _allWorkoutLogsModel.allWorkoutLogs.workoutLogs != null
+                  ? Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text("Toplam " +
+                          _allWorkoutLogsModel.allWorkoutLogs.workoutLogs.length
+                              .toString() +
+                          " antrenman yaptınız."),
+                    )
+                  : Text(""),
               ListView.builder(
                 physics: NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
@@ -71,7 +103,10 @@ class StudentWorkoutPlanPage extends StatelessWidget {
                                         height: 10,
                                       ),
                                       Text("Sıradaki"),
-                                      Icon(FontAwesomeIcons.arrowRight),
+                                      Icon(
+                                        FontAwesomeIcons.arrowRight,
+                                        color: Colors.blue,
+                                      ),
                                     ],
                                   )
                                 : null,

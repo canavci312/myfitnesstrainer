@@ -16,7 +16,7 @@ class ExerciseLogs {
 
   ExerciseLogs.fromMap(Map<String, dynamic> map) {
     if (map != null) {
-      this.exerciseName = map['exerciseID'];
+      this.exerciseName = map['exerciseName'];
       var list = map['setLogs'] as List;
       List<SetLogs> setLogsList = list.map((i) => SetLogs.fromMap(i)).toList();
       this.setLogs = setLogsList;

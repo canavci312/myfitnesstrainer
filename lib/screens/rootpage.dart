@@ -38,6 +38,7 @@ class RootPage extends StatelessWidget {
                 Provider.of<MeasurementLogsModel>(context, listen: true);
             if (_allWorkoutLogs.state == LogsState.Loading &&
                 _allMeasurementLogs.state == MeasurementLogsState.Loading) {
+              print("girdim");
               _allMeasurementLogs.loadMeasurementLogs();
               _allWorkoutLogs.loadWorkoutLogs();
               return LoadingScreen();

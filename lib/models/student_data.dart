@@ -1,5 +1,6 @@
 import 'package:myfitnesstrainer/models/measurement.dart';
 import 'package:myfitnesstrainer/models/nutrition_plan.dart';
+import 'package:myfitnesstrainer/models/student_activity.dart';
 import 'package:myfitnesstrainer/models/student_other_information.dart';
 import 'package:myfitnesstrainer/models/user.dart';
 import 'package:myfitnesstrainer/models/workout_plan.dart';
@@ -12,6 +13,7 @@ class StudentData {
   Measurement recentMeasurement;
   Measurement lastMeasurement;
   User _coach;
+  StudentActivity studentActivity;
   User get getUser => _user;
 
   set setUser(User user) => this._user = user;
@@ -26,6 +28,7 @@ class StudentData {
   User get getCoach => _coach;
 
   StudentData({User user, WorkoutPlan workoutPlan, User coach}) {
+    studentActivity = StudentActivity();
     setUser = user;
     setWorkoutPlan = workoutPlan;
     setCoach = coach;
@@ -39,6 +42,7 @@ class StudentData {
     studentOtherInformation =
         StudentOtherInformation.fromMap(map['studentOtherInformation']);
     nutritionPlan = NutritionPlan.fromMap(map['nutritionPlan']);
+    studentActivity = StudentActivity.fromMap(map['studentActivity']);
   }
   Map<String, dynamic> toMap() {
     return {
@@ -57,6 +61,8 @@ class StudentData {
       if (studentOtherInformation == null) 'studentOtherInformation': null,
       if (nutritionPlan != null) 'nutritionPlan': nutritionPlan.toMap(),
       if (nutritionPlan == null) 'nutritionPlan': null,
+      if (nutritionPlan != null) 'studentActivity': studentActivity.toMap(),
+      if (nutritionPlan == null) 'studentActivity': null,
     };
   }
 
@@ -75,6 +81,8 @@ class StudentData {
       if (studentOtherInformation == null) 'studentOtherInformation': null,
       if (nutritionPlan != null) 'nutritionPlan': nutritionPlan.toMap(),
       if (nutritionPlan == null) 'nutritionPlan': null,
+      if (nutritionPlan != null) 'studentActivity': studentActivity.toMap(),
+      if (nutritionPlan == null) 'studentActivity': null,
     };
   }
 
@@ -86,5 +94,6 @@ class StudentData {
     studentOtherInformation =
         StudentOtherInformation.fromMap(map['studentOtherInformation']);
     nutritionPlan = NutritionPlan.fromMap(map['nutritionPlan']);
+    studentActivity = StudentActivity.fromMap(map['studentActivity']);
   }
 }

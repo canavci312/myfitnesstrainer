@@ -23,7 +23,7 @@ class StudentHomePage extends StatefulWidget {
 @override
 class StudentHomePageState extends State<StudentHomePage> {
   RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
+      RefreshController(initialRefresh: true);
   int _currentIndex = 0;
   StudentNutritionPlanPage _nutritionPlanPage;
   StudentWorkoutPlanPage _workoutPlanPage;

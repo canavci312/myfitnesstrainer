@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:myfitnesstrainer/models/workout.dart';
 import 'package:myfitnesstrainer/models/workout_logs.dart';
-import 'package:myfitnesstrainer/models/workout_logslist.dart';
 import 'package:myfitnesstrainer/screens/loading_screen.dart';
 import 'package:myfitnesstrainer/viewmodel/all_workout_logs_viewmodel.dart';
-import 'package:myfitnesstrainer/viewmodel/student_data.viewmodel.dart';
 import 'package:provider/provider.dart';
 
 class WorkoutSummary extends StatelessWidget {
@@ -14,9 +12,11 @@ class WorkoutSummary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    WorkoutLogs workoutLogsClean = WorkoutLogs();
+    workoutLogsClean.exerciseLogs = [];
+    // print("burdayım" + workoutLogs.exerciseLogs.toString());
     final _allWorkoutLogs =
         Provider.of<AllWorkoutLogsModel>(context, listen: true);
-    final _studentData = Provider.of<StudentDataModel>(context, listen: true);
     if (_allWorkoutLogs.state == LogsState.Idle)
       return Scaffold(
         appBar: AppBar(
@@ -25,46 +25,19 @@ class WorkoutSummary extends StatelessWidget {
             MaterialButton(
                 color: Colors.blue,
                 onPressed: () {
-                  workoutLogs.workoutName = _workout.name;
-                  _allWorkoutLogs.allWorkoutLogs.workoutLogs.add(workoutLogs);
+                  workoutLogsClean.date = workoutLogs.date;
+                  workoutLogsClean.workoutName = _workout.name;
+                  workoutLogs.exerciseLogs.forEach((element) {
+                    if (element.setLogs.isNotEmpty)
+                      workoutLogsClean.exerciseLogs.add(element);
+                  });
+                  //               print("burdayım" + workoutLogs.exerciseLogs.toString());
+                  _allWorkoutLogs.allWorkoutLogs.workoutLogs
+                      .add(workoutLogsClean);
 
                   _allWorkoutLogs.state = LogsState.Loading;
                   _allWorkoutLogs.saveWorkoutLogs();
-
                   Navigator.of(context).popUntil((route) => route.isFirst);
-
-                  /*           print(_allWorkoutLogs.allWorkoutLogs.workoutLogsList);
-                  if (_allWorkoutLogs.allWorkoutLogs.workoutLogsList.length ==
-                      0) {
-                    WorkoutLogsList _workoutLogsList = WorkoutLogsList();
-                    _workoutLogsList.workoutName = _workout.name;
-                    _workoutLogsList.workoutLogs.add(workoutLogs);
-                    _allWorkoutLogs.allWorkoutLogs.workoutLogsList
-                        .add(_workoutLogsList);
-                    print("geldim 1");
-                  } else {
-                    _allWorkoutLogs.allWorkoutLogs.workoutLogsList
-                        .forEach((element) {
-                      if (element.workoutName == _workout.name) {
-                        element.workoutLogs.add(workoutLogs);
-                        print("geldim 2");
-                      } else {
-                        print(_allWorkoutLogs.allWorkoutLogs.workoutLogsList);
-                        WorkoutLogsList _workoutLogsList = WorkoutLogsList();
-                        _workoutLogsList.workoutName = _workout.name;
-                        _workoutLogsList.workoutLogs.add(workoutLogs);
-                        _allWorkoutLogs.allWorkoutLogs.workoutLogsList
-                            .add(_workoutLogsList);
-
-                        print("geldim");
-                      }
-                    });
-                  }
-
-                  _allWorkoutLogs.state = LogsState.Loading;
-
-                  _allWorkoutLogs.saveWorkoutLogs();
-                  Navigator.of(context).popUntil((route) => route.isFirst);*/
                 },
                 child: Text(
                   "KAYDET",

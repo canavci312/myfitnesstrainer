@@ -25,6 +25,7 @@ class MeasurementLogsModel with ChangeNotifier {
     _state = MeasurementLogsState.Loading;
     allMeasurements = MeasurementLogs();
   }
+  
 
   Future<void> loadMeasurementLogs() async {
     allMeasurements =

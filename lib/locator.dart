@@ -7,6 +7,7 @@ import 'package:myfitnesstrainer/viewmodel/all_workout_logs_viewmodel.dart';
 import 'package:myfitnesstrainer/viewmodel/exercises_viewmodel.dart';
 import 'package:myfitnesstrainer/viewmodel/measurement_logs_viewmodel.dart';
 import 'package:myfitnesstrainer/viewmodel/student_data.viewmodel.dart';
+import 'package:myfitnesstrainer/viewmodel/student_photos_page_viewmodel.dart';
 import 'package:myfitnesstrainer/viewmodel/trainer_data_viewmodel.dart';
 import 'package:myfitnesstrainer/viewmodel/userviewmodel.dart';
 
@@ -23,4 +24,5 @@ void setupLocator() {
   locator.registerLazySingleton(() => StudentDataModel());
   locator.registerLazySingleton(() => MeasurementLogsModel());
   locator.registerLazySingleton(() => AllWorkoutLogsModel());
+  locator.registerLazySingleton(() => StudentPhotosPageViewModel());
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myfitnesstrainer/models/workout.dart';
+import 'package:myfitnesstrainer/screens/common/exercise_details.dart';
 import 'package:myfitnesstrainer/screens/common/navigation.dart';
 import 'package:myfitnesstrainer/screens/student/workout_helper.dart';
 
@@ -25,13 +26,19 @@ class StudentWorkoutDetails extends StatelessWidget {
             shrinkWrap: true,
             itemCount: workout.exerciseTargetsList.length,
             itemBuilder: (BuildContext context, int index2) {
-              return Card(
-                margin: EdgeInsets.all(10.0),
-                child: ListTile(
-                    title:
-                        Text(workout.exerciseTargetsList[index2].exercise.name),
-                    subtitle:
-                        Text(workout.exerciseTargetsList[index2].toString())),
+              return GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(NavigationFromLeft(ExerciseDetails(
+                      workout.exerciseTargetsList[index2].exercise)));
+                },
+                child: Card(
+                  margin: EdgeInsets.all(10.0),
+                  child: ListTile(
+                      title: Text(
+                          workout.exerciseTargetsList[index2].exercise.name),
+                      subtitle:
+                          Text(workout.exerciseTargetsList[index2].toString())),
+                ),
               );
             }),
       ]),

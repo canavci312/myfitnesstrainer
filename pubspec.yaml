@@ -35,7 +35,6 @@ dependencies:
   provider: ^4.3.1
   google_sign_in: ^4.5.1
   firebase_core: ^0.4.5
-  font_awesome_flutter: ^8.8.1
   pull_to_refresh: ^1.6.0
   shared_preferences: ^0.5.10
   get_it: ^4.0.4
@@ -47,6 +46,16 @@ dependencies:
   timeago: ^2.0.27
   vibration: ^1.4.0
   firestore_ui: ^1.10.0
+  flutter_icons: ^1.1.0
+  charts_flutter: ^0.9.0
+  image_picker: ^0.6.7+11
+  font_awesome_flutter: ^8.8.1
+  youtube_player_flutter: ^7.0.0+7
+  video_player: ^0.11.0
+  firebase_storage: ^3.1.6
+  http: ^0.12.2
+  image: ^2.1.18
+  merge_images: ^1.0.3
 dev_dependencies:
   flutter_test:
     sdk: flutter

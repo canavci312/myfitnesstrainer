@@ -26,6 +26,7 @@ class AllWorkoutLogsModel with ChangeNotifier {
 
   Future<void> loadWorkoutLogs() async {
     allWorkoutLogs = await _firestoreDBService.getWorkoutLogs(_userModel.user);
+    allWorkoutLogs.workoutLogs.sort((a, b) => b.date.compareTo(a.date));
     state = LogsState.Idle;
   }
 

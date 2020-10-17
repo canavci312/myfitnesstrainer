@@ -96,7 +96,7 @@ class TrainerHomePageState extends State<TrainerHomePage> {
               : null,
 
       appBar: AppBar(
-        title: Text("Gymnopolis",
+        title: Text("uygulama adı",
             style: TextStyle(fontFamily: "Signatra", fontSize: 35)),
       ),
 

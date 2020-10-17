@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
+import 'package:myfitnesstrainer/screens/student/measurement_history.dart';
+import 'package:myfitnesstrainer/screens/student/student_photos_page.dart';
 import 'package:myfitnesstrainer/screens/student/workout_history.dart';
 import 'package:myfitnesstrainer/viewmodel/all_workout_logs_viewmodel.dart';
+import 'package:myfitnesstrainer/viewmodel/measurement_logs_viewmodel.dart';
 import 'package:myfitnesstrainer/viewmodel/student_data.viewmodel.dart';
 import 'package:myfitnesstrainer/viewmodel/userviewmodel.dart';
 import 'package:provider/provider.dart';
@@ -9,6 +13,9 @@ class StudentDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     UserModel userModel = Provider.of<UserModel>(context);
+    final _measurementLogsModel =
+        Provider.of<MeasurementLogsModel>(context, listen: true);
+
     final _studentModel = Provider.of<StudentDataModel>(context, listen: true);
     final _allWorkoutLog =
         Provider.of<AllWorkoutLogsModel>(context, listen: true);
@@ -42,9 +49,30 @@ class StudentDrawer extends StatelessWidget {
               title: Text('Antrenman Geçmişi'),
             ),
           ),
-          ListTile(
-            leading: Icon(Icons.history),
-            title: Text('Ölçüm Geçmişi'),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => MeasurementHistoryPage()),
+              );
+            },
+            child: ListTile(
+              leading: Icon(MaterialCommunityIcons.scale_bathroom),
+              title: Text('Ölçüm Geçmişi'),
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => StudentPhotosPage()),
+              );
+            },
+            child: ListTile(
+              leading: Icon(Icons.photo_library),
+              title: Text('Fotoğraflarım'),
+            ),
           ),
           ListTile(
             leading: Icon(Icons.school),
@@ -54,6 +82,7 @@ class StudentDrawer extends StatelessWidget {
             onTap: () {
               _studentModel.reset();
               _allWorkoutLog.reset();
+              _measurementLogsModel.reset();
               userModel.signOut();
             },
             child: Align(

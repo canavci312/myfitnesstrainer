@@ -29,6 +29,7 @@ class MyApp extends StatelessWidget {
                 child: ChangeNotifierProvider(
                   create: (context) => locator<MeasurementLogsModel>(),
                   child: MaterialApp(
+                    debugShowCheckedModeBanner: false,
                     localizationsDelegates: [
                       GlobalMaterialLocalizations.delegate
                     ],
