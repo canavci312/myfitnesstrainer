@@ -1,20 +1,2 @@
-<<<<<<< HEAD
-# myfitnesstrainer
-
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-=======
-# myfitnesstrainer
->>>>>>> 5de08403380070c3c9a51157807a497b1851521d
+3rd iteration of my indie mobile app project that never went live.
+Codebase is mostly useless now but I learned a lot while building this project
